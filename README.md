@@ -26,7 +26,7 @@ O `skoob-recomenda` instala o comando `recomenda`, que lê a sua estante, encont
 sha256sum -c checksums.txt --ignore-missing
 ```
 
-**Com Go 1.25+:**
+**Com Go 1.26+:**
 
 ```bash
 go install github.com/ltmleo/skoob-recomenda/cmd/recomenda@latest

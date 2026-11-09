@@ -62,7 +62,9 @@ jobs:
       - name: go vet
         run: go vet ./...
       - name: govulncheck
-        run: go run golang.org/x/vuln/cmd/govulncheck@v1.1.4 ./...
+        # Versões antigas do govulncheck quebram (panic) com Go novo: manter
+        # atualizado junto com o "go" do go.mod. A v1.9.0 exige Go >= 1.26.
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
       - name: shellcheck
         run: shellcheck scripts/*.sh
 

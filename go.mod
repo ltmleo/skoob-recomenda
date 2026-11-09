@@ -1,6 +1,6 @@
 module github.com/ltmleo/skoob-recomenda
 
-go 1.25
+go 1.26
 
 require (
 	github.com/chromedp/cdproto v0.159.0

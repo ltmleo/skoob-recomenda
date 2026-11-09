@@ -39,7 +39,7 @@ no corpo do commit. Escopos comuns: `web`, `recommend`, `crawl`, `source`,
 
 ## Ambiente de desenvolvimento
 
-Requer **Go 1.25+**. O Chrome/Chromium só é necessário para `recomenda login`
+Requer **Go 1.26+**. O Chrome/Chromium só é necessário para `recomenda login`
 e para os testes de navegador (pulados quando `CHROME_PATH` não está definido).
 
 ```bash
