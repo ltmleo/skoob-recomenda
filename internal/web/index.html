@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estante e Grafo</title>
+<style>
+:root{
+  --bg:#f7f5f0;--surface:#fffdf9;--surface-2:#f0ece3;--fg:#22201c;--muted:#6f6a60;--line:#e3ddd0;
+  --accent:#2f6b4f;--accent-soft:#e1efe7;--accent-fg:#fff;
+  --read:#2f6b4f;--read-bg:#e1efe7;--reading:#8a5a00;--reading-bg:#fbefd6;
+  --want:#2d5a9b;--want-bg:#e2ebf8;--abandoned:#9b3b3b;--abandoned-bg:#f6e3e1;
+  --star:#c58a00;--shadow:0 1px 2px rgba(40,30,10,.06),0 4px 14px rgba(40,30,10,.05);
+  --radius:12px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#151412;--surface:#1d1c19;--surface-2:#26241f;--fg:#ece8df;--muted:#a09a8e;--line:#312e28;
+  --accent:#7cc39c;--accent-soft:#1f3329;--accent-fg:#0f1a14;
+  --read:#7cc39c;--read-bg:#1f3329;--reading:#e3b45a;--reading-bg:#33291a;
+  --want:#8db4ea;--want-bg:#1d2a3d;--abandoned:#e59a92;--abandoned-bg:#3a2321;
+  --star:#e6b443;--shadow:0 1px 2px rgba(0,0,0,.3);
+}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg)}
+body{font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:inherit}
+button{font:inherit;color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:16px;min-height:60px;flex-wrap:wrap;padding:8px 0}
+.brand{font-family:Georgia,"Iowan Old Style",serif;font-size:1.25rem;font-weight:700;letter-spacing:-.01em;text-decoration:none}
+.stats{color:var(--muted);font-size:.85rem}
+nav{display:flex;gap:4px;margin-left:auto}
+nav a{padding:7px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:500}
+nav a[aria-current="page"]{background:var(--fg);color:var(--bg)}
+nav a:hover:not([aria-current="page"]){background:var(--surface-2);color:var(--fg)}
+
+.job{display:none;align-items:center;gap:12px;padding:8px 0 10px;font-size:.88rem}
+.job.on{display:flex}
+.job .meter{flex:1;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;max-width:360px}
+.job .meter i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s}
+
+main{padding:24px 0 64px}
+h1{font-family:Georgia,"Iowan Old Style",serif;font-size:1.7rem;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
+.lede{color:var(--muted);margin:0 0 20px;max-width:62ch}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px}
+.chip{border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:999px;cursor:pointer;font-size:.88rem;display:inline-flex;gap:6px;align-items:center}
+.chip b{font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip[aria-pressed="true"] b{color:inherit;opacity:.75}
+input[type=search],select{font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px;min-width:0}
+input[type=search]{flex:1 1 200px;max-width:320px}
+.spacer{flex:1}
+label.toggle{display:inline-flex;gap:8px;align-items:center;font-size:.88rem;color:var(--muted);cursor:pointer}
+
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:start;text-decoration:none;transition:transform .12s,border-color .12s}
+a.card:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.cover{width:64px;aspect-ratio:2/3;border-radius:4px;background:var(--surface-2);object-fit:cover;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;color:var(--muted);font-size:1.1rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.cover.lg{width:120px}
+.title{font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.author{color:var(--muted);font-size:.88rem;margin-top:2px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:8px;font-size:.84rem;color:var(--muted)}
+.why{font-size:.82rem;color:var(--muted);margin-top:6px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:.76rem;font-weight:600;white-space:nowrap}
+.b-read{color:var(--read);background:var(--read-bg)}
+.b-reading{color:var(--reading);background:var(--reading-bg)}
+.b-want_to_read{color:var(--want);background:var(--want-bg)}
+.b-abandoned{color:var(--abandoned);background:var(--abandoned-bg)}
+.b-new{color:var(--accent);background:var(--accent-soft)}
+.stars{color:var(--star);font-weight:600;font-variant-numeric:tabular-nums}
+.pred{display:flex;align-items:center;gap:8px;margin-top:8px}
+.pred .meter{flex:1;height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden;max-width:120px}
+.pred .meter i{display:block;height:100%;background:var(--accent)}
+.pred strong{font-variant-numeric:tabular-nums}
+.dim{opacity:.55}
+
+.hero{display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:start;margin-bottom:28px}
+.hero .facts{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:.9rem;margin:10px 0 16px}
+.hero .facts strong{color:var(--fg);font-variant-numeric:tabular-nums}
+.btn{border:1px solid var(--line);background:var(--surface);padding:8px 16px;border-radius:999px;cursor:pointer;font-weight:500;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.trail{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:.84rem;color:var(--muted);margin-bottom:14px}
+.trail a{text-decoration:none;padding:2px 8px;border-radius:6px;background:var(--surface-2);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trail a:hover{color:var(--fg)}
+.note{background:var(--surface-2);border-radius:var(--radius);padding:12px 14px;color:var(--muted);font-size:.9rem;margin-bottom:18px}
+.empty{color:var(--muted);padding:40px 0;text-align:center}
+h2{font-size:1.05rem;margin:0 0 12px}
+
+.gwrap{position:relative;height:min(72vh,720px);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;touch-action:none;box-shadow:var(--shadow)}
+.gwrap canvas{width:100%;height:100%;display:block;cursor:grab}
+.gwrap canvas.grabbing{cursor:grabbing}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);padding:5px 9px;border-radius:6px;font-size:.8rem;display:none;max-width:280px;line-height:1.35;z-index:2}
+.legend{position:absolute;left:10px;bottom:10px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.78rem;color:var(--muted);background:color-mix(in srgb,var(--surface) 88%,transparent);padding:5px 10px;border-radius:8px;max-width:calc(100% - 20px)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px}
+.dot.ring{background:transparent;border:2.5px solid var(--accent);width:12px;height:12px}
+.gctl{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+.gctl button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:3px 11px;cursor:pointer;min-width:34px}
+.gempty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);text-align:center;padding:24px}
+.cols{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px;margin-top:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.panel .head{display:grid;grid-template-columns:56px 1fr;gap:12px;margin-bottom:12px}
+.panel .cover{width:56px}
+.conn{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border:0;border-bottom:1px solid var(--line);background:none;width:100%;text-align:left;cursor:pointer;font-size:.9rem}
+.conn:hover .t2{text-decoration:underline}
+.conn .w{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.hist{list-style:none;margin:0;padding:0;font-size:.88rem}
+.hist li{padding:7px 0;border-bottom:1px solid var(--line);display:flex;gap:10px;justify-content:space-between}
+.hist .when{color:var(--muted);white-space:nowrap}
+input[type=range]{accent-color:var(--accent);width:120px}
+@media (max-width:800px){.cols{grid-template-columns:1fr}}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .hero{grid-template-columns:84px 1fr;gap:14px}.cover.lg{width:84px}
+  nav{margin-left:0;width:100%}
+  h1{font-size:1.35rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="#/">Estante e Grafo</a>
+      <span class="stats" id="stats"></span>
+      <nav>
+        <a href="#/" data-tab="recs">Para você</a>
+        <a href="#/estante" data-tab="shelf">Minha estante</a>
+        <a href="#/grafo" data-tab="graph">Grafo</a>
+      </nav>
+    </div>
+    <div class="job" id="job" role="status" aria-live="polite">
+      <span id="jobText"></span><span class="meter"><i id="jobBar"></i></span>
+      <button class="btn" id="jobCancel" type="button">Cancelar</button>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="app"><p class="empty">Carregando…</p></main>
+
+<script>
+const STATUS = {read:"Lido", reading:"Lendo", want_to_read:"Quero ler", abandoned:"Abandonei"};
+const $app = document.getElementById("app");
+let S = null;                    // /api/state
+let shelfFilter = "all", shelfQuery = "", shelfSort = "recent";
+let hideMine = false;
+try { hideMine = localStorage.getItem("hideMine") === "1"; } catch (e) {}
+let trail = [];                  // livros visitados ao seguir o grafo
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtStars = x => x > 0 ? "★ " + (Math.round(x * 10) / 10).toLocaleString("pt-BR") : "";
+const fmtDate = d => d ? new Date(d + "T12:00:00").toLocaleDateString("pt-BR", {month:"short", year:"numeric"}) : "";
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error((await r.text()) || r.statusText);
+  return r.json();
+}
+
+function cover(b, cls = "") {
+  const initials = esc((b.title || "?").trim().slice(0, 1).toUpperCase());
+  if (!b.cover) return `<div class="cover ${cls}">${initials}</div>`;
+  return `<img class="cover ${cls}" src="${esc(b.cover)}" alt="" loading="lazy"
+    onerror="this.outerHTML='<div class=&quot;cover ${cls}&quot;>${initials}</div>'">`;
+}
+
+function badge(m) {
+  if (!m) return "";
+  const st = m.status || "read";
+  const stars = m.stars > 0 ? ` · ${fmtStars(m.stars)}` : "";
+  return `<span class="badge b-${esc(st)}">${esc(STATUS[st] || st)}${stars}</span>`;
+}
+
+function card(b, body, {dim = false} = {}) {
+  return `<a class="card${dim ? " dim" : ""}" href="#/livro/${encodeURIComponent(b.id)}">
+    ${cover(b)}
+    <div><div class="title">${esc(b.title)}</div>${b.author ? `<div class="author">${esc(b.author)}</div>` : ""}${body}</div>
+  </a>`;
+}
+
+// --- views ---
+
+function viewRecs() {
+  // O servidor escolhe os livros pela evidência (ver recommend.RankLikes);
+  // aqui eles aparecem da maior para a menor nota prevista. O sort é
+  // estável: em caso de empate, vale a ordem de relevância do servidor.
+  const recs = [...S.recs].sort((a, b) => b.predicted - a.predicted);
+  let h = `<h1>Para você</h1>
+    <p class="lede">Ordenados pela nota que você deve dar, previstos a partir de ${S.neighbors} leitores com gosto parecido com o seu. Clique em um livro para seguir o grafo dele.</p>`;
+  if (!recs.length) {
+    return h + `<p class="empty">Ainda sem recomendações: poucos leitores com livros em comum.<br>
+      Abra um livro da sua estante e use “Expandir grafo” para trazer mais leitores.</p>`;
+  }
+  h += `<div class="grid">` + recs.map(r => {
+    const of = (r.becauseOf || []).length
+      ? `Porque você gostou de ${r.becauseOf.map(e => e.book.title).join(", ")}`
+      : "";
+    const why = r.because.length
+      ? `Leitores parecidos deram ${r.because.map(e => fmtStars(e.stars)).join(", ")}`
+      : "";
+    return card(r.book, `
+      <div class="pred"><strong>${r.predicted.toFixed(1)}</strong><span class="meter"><i style="width:${(r.predicted / 5 * 100).toFixed(0)}%"></i></span>
+      <span class="author">nota prevista</span></div>
+      <div class="meta">${badge(r.mine)}${r.support ? `<span>${r.support} leitores</span>` : ""}</div>
+      ${of ? `<div class="why">${esc(of)}</div>` : ""}
+      ${why ? `<div class="why">${esc(why)}</div>` : ""}`);
+  }).join("") + `</div>`;
+  return h;
+}
+
+function viewShelf() {
+  const counts = {all: S.shelf.length};
+  for (const it of S.shelf) counts[it.status] = (counts[it.status] || 0) + 1;
+  const q = shelfQuery.toLowerCase();
+  let items = S.shelf.filter(it =>
+    (shelfFilter === "all" || it.status === shelfFilter) &&
+    (!q || (it.book.title + " " + (it.book.author || "")).toLowerCase().includes(q)));
+  if (shelfSort === "stars") items = [...items].sort((a, b) => b.stars - a.stars);
+  if (shelfSort === "title") items = [...items].sort((a, b) => a.book.title.localeCompare(b.book.title, "pt-BR"));
+
+  const chip = (k, label) => counts[k] || k === "all"
+    ? `<button class="chip" data-filter="${k}" aria-pressed="${shelfFilter === k}">${label} <b>${counts[k] || 0}</b></button>` : "";
+  return `<h1>Minha estante</h1>
+    <p class="lede">Escolha um livro para ver o que quem também gostou dele leu e amou.</p>
+    <div class="toolbar">
+      ${chip("all", "Todos")}${chip("read", "Lidos")}${chip("reading", "Lendo")}${chip("want_to_read", "Quero ler")}${chip("abandoned", "Abandonei")}
+      <span class="spacer"></span>
+      <input type="search" id="q" placeholder="Buscar título ou autor" value="${esc(shelfQuery)}" aria-label="Buscar na estante">
+      <select id="sort" aria-label="Ordenar">
+        <option value="recent"${shelfSort === "recent" ? " selected" : ""}>Mais recentes</option>
+        <option value="stars"${shelfSort === "stars" ? " selected" : ""}>Maior nota</option>
+        <option value="title"${shelfSort === "title" ? " selected" : ""}>Título</option>
+      </select>
+    </div>
+    ${items.length ? `<div class="grid">` + items.map(it => card(it.book, `
+      <div class="meta">${badge(it)}${it.readAt ? `<span>${esc(fmtDate(it.readAt))}</span>` : ""}</div>`)).join("") + `</div>`
+      : `<p class="empty">Nenhum livro encontrado.</p>`}`;
+}
+
+async function viewBook(id) {
+  const d = await api("/api/book?id=" + encodeURIComponent(id));
+  const i = trail.findIndex(t => t.id === id);
+  trail = i >= 0 ? trail.slice(0, i + 1) : [...trail, {id, title: d.book.title}].slice(-8);
+
+  const job = S.job || {};
+  const busy = job.running;
+  const thisBusy = busy && job.bookId === id;
+  const visible = d.similar.filter(x => !(hideMine && x.mine && x.mine.status !== "want_to_read"));
+  const thin = d.likers < 10;
+
+  let h = "";
+  if (trail.length > 1) {
+    h += `<div class="trail" aria-label="Caminho no grafo">Trilha:` + trail.map((t, k) =>
+      (k ? "<span>→</span>" : "") + `<a href="#/livro/${encodeURIComponent(t.id)}" title="${esc(t.title)}">${esc(t.title)}</a>`).join("") + `</div>`;
+  }
+  h += `<section class="hero">
+    ${cover(d.book, "lg")}
+    <div>
+      <h1>${esc(d.book.title)}</h1>
+      ${d.book.author ? `<div class="author">${esc(d.book.author)}</div>` : ""}
+      <div class="facts">
+        ${d.mine ? badge(d.mine) : `<span class="badge b-new">Fora da sua estante</span>`}
+        <span><strong>${d.likers}</strong> gostaram (nota ≥ 4)</span>
+        <span><strong>${d.raters}</strong> avaliaram, no seu grafo</span>
+        ${expandedNote(id)}
+      </div>
+      <div class="actions">
+        ${S.canExpand ? `<button class="btn primary" id="expand" ${busy ? "disabled" : ""}>
+          ${thisBusy ? "Expandindo…" : "Expandir grafo deste livro"}</button>
+          <select id="readers" aria-label="Quantos leitores buscar" ${busy ? "disabled" : ""}>
+            <option value="20">20 leitores</option><option value="40" selected>40 leitores</option><option value="80">80 leitores</option>
+          </select>` : ""}
+        ${d.book.url ? `<a class="btn" href="${esc(d.book.url)}" target="_blank" rel="noopener">Ver no Skoob ↗</a>` : ""}
+      </div>
+    </div>
+  </section>`;
+
+  if (thin) {
+    h += `<div class="note">Poucos leitores deste livro no seu grafo, então os resultados ainda são frágeis.
+      ${S.canExpand ? "Use “Expandir grafo” para buscar no Skoob quem avaliou este livro e baixar as estantes dessas pessoas." : "Rode <code>recomenda login</code> e reinicie o serve para poder expandir."}</div>`;
+  }
+  h += `<div class="toolbar"><h2 style="margin:0">Quem gostou deste livro também gostou de</h2><span class="spacer"></span>
+    <label class="toggle"><input type="checkbox" id="hide" ${hideMine ? "checked" : ""}> Esconder os que já li ou abandonei</label></div>`;
+
+  if (!visible.length) {
+    h += `<p class="empty">${d.similar.length ? "Todos os livros relacionados já estão na sua estante." : "Nenhum livro com pelo menos 2 leitores em comum ainda."}</p>`;
+  } else {
+    const top = visible[0].score || 1;
+    h += `<div class="grid">` + visible.map(x => {
+      const mineDone = x.mine && x.mine.status !== "want_to_read" && x.mine.status !== "reading";
+      return card(x.book, `
+        <div class="pred"><span class="meter"><i style="width:${(x.score / top * 100).toFixed(0)}%"></i></span>
+        <span class="author">afinidade</span></div>
+        <div class="meta">${x.mine ? badge(x.mine) : `<span class="badge b-new">Novo para você</span>`}
+        <span>${x.coLikes} gostaram dos dois</span></div>`, {dim: mineDone});
+    }).join("") + `</div>`;
+  }
+  return h;
+}
+
+// --- grafo ---
+
+let G = null;                      // /api/graph
+let graphLiked = false, graphMin = null, graphIso = false, graphSel = null;
+const pos = new Map();             // posições preservadas entre recargas
+let sim = null;
+
+function autoMin(edges) {
+  if (!edges.length) return 1;
+  for (let m = 1; m < edges[0].w; m++) if (edges.filter(e => e.w >= m).length <= 450) return m;
+  return edges[0].w;
+}
+
+function expandedNote(id) {
+  const ex = (S.expansions || []).filter(e => e.bookId === id);
+  if (!ex.length) return "";
+  const last = ex[ex.length - 1];
+  return `<span class="badge b-new">Grafo expandido ${ex.length > 1 ? ex.length + "× · " : ""}${esc(new Date(last.at).toLocaleDateString("pt-BR"))}</span>`;
+}
+
+async function viewGraph() {
+  G = await api("/api/graph" + (graphLiked ? "?liked=1" : ""));
+  const maxW = G.edges.length ? G.edges[0].w : 1;
+  if (graphMin == null || graphMin > maxW) graphMin = autoMin(G.edges);
+  const hist = [...(S.expansions || [])].reverse();
+  return `<h1>Grafo da sua estante</h1>
+    <p class="lede">Cada nó é um livro seu. Uma aresta liga dois livros que os mesmos leitores têm; quanto mais leitores em comum, mais grossa.
+      Arraste para mover, role para dar zoom, clique para ver as conexões e dê duplo clique para abrir o livro.</p>
+    <div class="toolbar">
+      <button class="chip" data-mode="0" aria-pressed="${!graphLiked}">Todos os leitores</button>
+      <button class="chip" data-mode="1" aria-pressed="${graphLiked}">Só quem gostou dos dois</button>
+      <span class="spacer"></span>
+      <label class="toggle">Arestas com ≥
+        <input type="range" id="minw" min="1" max="${maxW}" value="${graphMin}"> <b id="minwv">${graphMin}</b> leitores</label>
+      <label class="toggle"><input type="checkbox" id="iso" ${graphIso ? "checked" : ""}> Livros sem conexão</label>
+    </div>
+    <div class="gwrap" id="gwrap">
+      <canvas id="gc" aria-label="Grafo dos seus livros"></canvas>
+      <div class="tip" id="tip"></div>
+      <div class="gctl"><button id="zin" aria-label="Aproximar">+</button><button id="zout" aria-label="Afastar">−</button><button id="zfit">Ajustar</button></div>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--read)"></i>Lido</span>
+        <span><i class="dot" style="background:var(--reading)"></i>Lendo</span>
+        <span><i class="dot" style="background:var(--want)"></i>Quero ler</span>
+        <span><i class="dot" style="background:var(--abandoned)"></i>Abandonei</span>
+        <span><i class="dot ring"></i>Grafo expandido</span>
+        <span>tamanho = leitores no grafo</span>
+      </div>
+    </div>
+    <div class="cols">
+      <div class="panel" id="gpanel"></div>
+      <div class="panel"><h2>Expansões salvas</h2>
+        ${hist.length ? `<ul class="hist">` + hist.map(e => `<li>
+          <span><a href="#/livro/${encodeURIComponent(e.bookId)}">${esc(e.title || e.bookId)}</a> · +${e.added} estantes</span>
+          <span class="when">${esc(new Date(e.at).toLocaleString("pt-BR", {dateStyle: "short", timeStyle: "short"}))}</span></li>`).join("") + `</ul>`
+          : `<p class="author">Nenhuma ainda. Selecione um livro no grafo e use “Expandir grafo”: o resultado fica salvo e o grafo se atualiza sozinho.</p>`}
+      </div>
+    </div>`;
+}
+
+function bindGraph() {
+  document.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => {
+    graphLiked = b.dataset.mode === "1"; graphMin = null; render({keep: true});
+  });
+  const r = document.getElementById("minw");
+  r.oninput = () => { graphMin = +r.value; document.getElementById("minwv").textContent = r.value; startGraph(); };
+  document.getElementById("iso").onchange = e => { graphIso = e.target.checked; startGraph(); };
+}
+
+function stopGraph() {
+  if (!sim) return;
+  sim.stop(); sim = null;
+}
+
+function startGraph() {
+  stopGraph();
+  const canvas = document.getElementById("gc");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const css = getComputedStyle(document.documentElement);
+  const v = k => css.getPropertyValue(k).trim();
+  const C = {read: v("--read"), reading: v("--reading"), want_to_read: v("--want"), abandoned: v("--abandoned"),
+             line: v("--muted"), fg: v("--fg"), bg: v("--surface"), accent: v("--accent")};
+
+  const edges = G.edges.filter(e => e.w >= graphMin);
+  const deg = new Set(); edges.forEach(e => { deg.add(e.a); deg.add(e.b); });
+  const nodes = G.nodes.filter(n => graphIso || deg.has(n.id)).map((n, i, arr) => {
+    const p = pos.get(n.id);
+    const a = i / arr.length * Math.PI * 2, rr = 120 + (i % 7) * 25;
+    return {...n, x: p ? p.x : Math.cos(a) * rr, y: p ? p.y : Math.sin(a) * rr, vx: 0, vy: 0};
+  });
+  const byId = new Map(nodes.map(n => [n.id, n]));
+  const E = edges.filter(e => byId.has(e.a) && byId.has(e.b)).map(e => ({s: byId.get(e.a), t: byId.get(e.b), w: e.w}));
+  const maxW = Math.max(1, ...E.map(e => e.w));
+  const maxR = Math.max(1, ...nodes.map(n => n.readers));
+  nodes.forEach(n => n.r = 4 + 13 * Math.sqrt(n.readers / maxR));
+  const adj = new Map(nodes.map(n => [n.id, []]));
+  E.forEach(e => { adj.get(e.s.id).push({o: e.t, w: e.w}); adj.get(e.t.id).push({o: e.s, w: e.w}); });
+  const fresh = nodes.some(n => !pos.has(n.id));
+
+  const wrap = document.getElementById("gwrap"), tip = document.getElementById("tip");
+  wrap.querySelector(".gempty")?.remove();
+  if (!nodes.length) {
+    wrap.insertAdjacentHTML("beforeend", `<div class="gempty">Sem conexões com esse filtro.<br>Diminua o mínimo de leitores ou expanda o grafo de algum livro.</div>`);
+  }
+
+  let W = 0, H = 0, view = {k: 1, x: 0, y: 0}, alpha = 1, raf = 0, hover = null, drag = null, pan = null, fitted = !fresh;
+  const toWorld = (sx, sy) => ({x: (sx - W / 2 - view.x) / view.k, y: (sy - H / 2 - view.y) / view.k});
+  const hit = (sx, sy) => {
+    const p = toWorld(sx, sy); let best = null, bd = Infinity;
+    for (const n of nodes) { const d = Math.hypot(n.x - p.x, n.y - p.y); if (d < n.r + 5 / view.k && d < bd) { bd = d; best = n; } }
+    return best;
+  };
+
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+  function fit() {
+    if (!nodes.length) return;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const n of nodes) { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); }
+    view.k = Math.max(.2, Math.min(2.5, Math.min(W / (x1 - x0 + 120), H / (y1 - y0 + 120))));
+    view.x = -(x0 + x1) / 2 * view.k; view.y = -(y0 + y1) / 2 * view.k;
+  }
+
+  function tick() {
+    const n = nodes.length;
+    for (let i = 0; i < n; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < n; j++) {
+        const b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy + .01;
+        if (d2 > 360000) continue;
+        const f = 1400 / d2 * alpha;
+        a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f;
+      }
+    }
+    for (const e of E) {
+      const t = e.w / maxW;
+      const dx = e.t.x - e.s.x, dy = e.t.y - e.s.y, d = Math.hypot(dx, dy) || .01;
+      const f = (d - (110 - 70 * t)) * (.006 + .03 * t) * alpha / d;
+      e.s.vx += dx * f; e.s.vy += dy * f; e.t.vx -= dx * f; e.t.vy -= dy * f;
+    }
+    for (const a of nodes) {
+      a.vx -= a.x * .004 * alpha; a.vy -= a.y * .004 * alpha;
+      a.vx *= .6; a.vy *= .6;
+      const sp = Math.hypot(a.vx, a.vy); if (sp > 25) { a.vx *= 25 / sp; a.vy *= 25 / sp; }
+      if (drag && drag.node === a) { a.vx = a.vy = 0; continue; }
+      a.x += a.vx; a.y += a.vy;
+    }
+    alpha *= .985;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate(W / 2 + view.x, H / 2 + view.y); ctx.scale(view.k, view.k);
+    const focus = byId.get(graphSel) || hover;
+    const near = new Set();
+    if (focus) { near.add(focus.id); adj.get(focus.id).forEach(x => near.add(x.o.id)); }
+    ctx.strokeStyle = C.line;
+    for (const e of E) {
+      const t = e.w / maxW, on = focus && (e.s === focus || e.t === focus);
+      ctx.globalAlpha = focus ? (on ? .35 + .55 * t : .03) : .07 + .4 * t;
+      ctx.lineWidth = ((on ? 1.2 : .5) + 3.5 * t) / view.k;
+      ctx.beginPath(); ctx.moveTo(e.s.x, e.s.y); ctx.lineTo(e.t.x, e.t.y); ctx.stroke();
+    }
+    for (const n of nodes) {
+      ctx.globalAlpha = focus && !near.has(n.id) ? .18 : 1;
+      ctx.fillStyle = C[n.status] || C.read;
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+      if (n.expanded) { ctx.strokeStyle = C.accent; ctx.lineWidth = 3 / view.k; ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 3.5 / view.k, 0, Math.PI * 2); ctx.stroke(); }
+      if (n === focus) { ctx.strokeStyle = C.fg; ctx.lineWidth = 2 / view.k; ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 1, 0, Math.PI * 2); ctx.stroke(); }
+    }
+    ctx.font = `${12 / view.k}px system-ui,sans-serif`; ctx.textAlign = "center"; ctx.lineJoin = "round";
+    for (const n of nodes) {
+      const show = focus ? near.has(n.id) : (n.r > 11 || view.k > 1.8);
+      if (!show) continue;
+      ctx.globalAlpha = 1;
+      const label = n.title.length > 30 ? n.title.slice(0, 29) + "…" : n.title;
+      const y = n.y + n.r + 13 / view.k;
+      ctx.strokeStyle = C.bg; ctx.lineWidth = 4 / view.k; ctx.strokeText(label, n.x, y);
+      ctx.fillStyle = C.fg; ctx.fillText(label, n.x, y);
+    }
+    ctx.restore();
+  }
+
+  function loop() {
+    if (alpha > .008 || drag) {
+      tick();
+      if (!fitted && alpha < .25) { fit(); fitted = true; }
+    }
+    draw();
+    raf = alpha > .008 || drag ? requestAnimationFrame(loop) : 0;
+  }
+  const wake = (a = .3) => { alpha = Math.max(alpha, a); if (!raf) raf = requestAnimationFrame(loop); };
+
+  const xy = ev => { const b = canvas.getBoundingClientRect(); return [ev.clientX - b.left, ev.clientY - b.top]; };
+  canvas.onpointerdown = ev => {
+    const [sx, sy] = xy(ev); const n = hit(sx, sy);
+    canvas.setPointerCapture(ev.pointerId); canvas.classList.add("grabbing");
+    if (n) drag = {node: n, moved: false}; else pan = {sx, sy, x: view.x, y: view.y, moved: false};
+  };
+  canvas.onpointermove = ev => {
+    const [sx, sy] = xy(ev);
+    if (drag) { const p = toWorld(sx, sy); drag.node.x = p.x; drag.node.y = p.y; drag.moved = true; wake(.15); return; }
+    if (pan) { view.x = pan.x + sx - pan.sx; view.y = pan.y + sy - pan.sy; pan.moved = pan.moved || Math.hypot(sx - pan.sx, sy - pan.sy) > 3; draw(); return; }
+    const n = hit(sx, sy);
+    if (n !== hover) { hover = n; if (!raf) draw(); }
+    if (n) {
+      tip.style.display = "block";
+      tip.innerHTML = `<strong>${esc(n.title)}</strong><br>${esc(STATUS[n.status] || "")}${n.stars > 0 ? " · " + fmtStars(n.stars) : ""} · ${n.readers} leitores · ${adj.get(n.id).length} conexões`;
+      tip.style.left = Math.max(8, Math.min(sx + 14, W - tip.offsetWidth - 8)) + "px"; tip.style.top = (sy + 14) + "px";
+    } else tip.style.display = "none";
+  };
+  canvas.onpointerup = () => {
+    canvas.classList.remove("grabbing");
+    if (drag && !drag.moved) select(drag.node.id);
+    if (pan && !pan.moved) select(null);
+    drag = null; pan = null;
+  };
+  canvas.onpointerleave = () => { hover = null; tip.style.display = "none"; if (!raf) draw(); };
+  canvas.ondblclick = ev => { const n = hit(...xy(ev)); if (n) location.hash = "#/livro/" + encodeURIComponent(n.id); };
+  canvas.onwheel = ev => {
+    ev.preventDefault();
+    const [sx, sy] = xy(ev), p = toWorld(sx, sy);
+    view.k = Math.max(.15, Math.min(6, view.k * Math.exp(-ev.deltaY * .0015)));
+    view.x = sx - W / 2 - p.x * view.k; view.y = sy - H / 2 - p.y * view.k;
+    draw();
+  };
+  const zoom = f => { const k = Math.max(.15, Math.min(6, view.k * f)); f = k / view.k; view.k = k; view.x *= f; view.y *= f; draw(); };
+  document.getElementById("zin").onclick = () => zoom(1.3);
+  document.getElementById("zout").onclick = () => zoom(1 / 1.3);
+  document.getElementById("zfit").onclick = () => { fit(); draw(); };
+
+  function select(id) { graphSel = id; renderPanel(byId, adj, select); draw(); }
+
+  const ro = new ResizeObserver(resize); ro.observe(canvas);
+  resize();
+  if (!fresh) { fit(); alpha = .12; }
+  if (graphSel && !byId.has(graphSel)) graphSel = null;
+  renderPanel(byId, adj, select);
+  raf = requestAnimationFrame(loop);
+
+  sim = {stop() {
+    cancelAnimationFrame(raf); ro.disconnect();
+    for (const n of nodes) pos.set(n.id, {x: n.x, y: n.y});
+  }};
+}
+
+function renderPanel(byId, adj, select) {
+  const el = document.getElementById("gpanel");
+  if (!el) return;
+  const n = byId.get(graphSel);
+  if (!n) {
+    const top = [...byId.values()].sort((a, b) => adj.get(b.id).length - adj.get(a.id).length).slice(0, 8);
+    el.innerHTML = `<h2>Clique em um livro</h2><p class="author">Os mais conectados da sua estante:</p>` +
+      top.map(t => `<button class="conn" data-sel="${esc(t.id)}"><span class="t2">${esc(t.title)}</span><span class="w">${adj.get(t.id).length} conexões</span></button>`).join("");
+  } else {
+    const conns = [...adj.get(n.id)].sort((a, b) => b.w - a.w).slice(0, 12);
+    const busy = S.job && S.job.running;
+    el.innerHTML = `<div class="head">${cover(n)}<div><div class="title">${esc(n.title)}</div>
+        ${n.author ? `<div class="author">${esc(n.author)}</div>` : ""}
+        <div class="meta">${badge(n)}<span>${n.readers} leitores no grafo</span>${expandedNote(n.id)}</div></div></div>
+      <div class="actions" style="margin-bottom:12px">
+        <a class="btn" href="#/livro/${encodeURIComponent(n.id)}">Abrir livro</a>
+        ${S.canExpand ? `<button class="btn primary" id="gexp" ${busy ? "disabled" : ""}>${busy ? "Expandindo…" : "Expandir grafo"}</button>
+          <select id="greaders" aria-label="Quantos leitores buscar" ${busy ? "disabled" : ""}><option value="20">20 leitores</option><option value="40" selected>40 leitores</option><option value="80">80 leitores</option></select>` : ""}
+      </div>
+      <h2>Leitores em comum com</h2>` +
+      (conns.length ? conns.map(c => `<button class="conn" data-sel="${esc(c.o.id)}"><span class="t2">${esc(c.o.title)}</span><span class="w">${c.w} leitores</span></button>`).join("")
+        : `<p class="author">Nenhuma conexão com o filtro atual.</p>`);
+    const b = document.getElementById("gexp");
+    if (b) b.onclick = () => startExpand(n.id, document.getElementById("greaders").value);
+  }
+  el.querySelectorAll("[data-sel]").forEach(b => b.onclick = () => select(b.dataset.sel));
+}
+
+// --- render / routing ---
+
+function setTab(tab) {
+  document.querySelectorAll("nav a").forEach(a => {
+    if (a.dataset.tab === tab) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  });
+}
+
+async function render({keep = false} = {}) {
+  const hash = location.hash || "#/";
+  const y = window.scrollY;
+  stopGraph();
+  try {
+    if (hash.startsWith("#/livro/")) {
+      setTab(null);
+      const id = decodeURIComponent(hash.slice(8));
+      $app.innerHTML = await viewBook(id);
+      bindBook(id);
+    } else if (hash.startsWith("#/estante")) {
+      setTab("shelf"); trail = [];
+      $app.innerHTML = viewShelf(); bindShelf();
+    } else if (hash.startsWith("#/grafo")) {
+      setTab("graph"); trail = [];
+      $app.innerHTML = await viewGraph(); bindGraph(); startGraph();
+    } else {
+      setTab("recs"); trail = [];
+      $app.innerHTML = viewRecs();
+    }
+    window.scrollTo({top: keep ? y : 0});
+  } catch (e) {
+    $app.innerHTML = `<p class="empty">Erro: ${esc(e.message)}</p>`;
+  }
+}
+
+function bindShelf() {
+  document.querySelectorAll("[data-filter]").forEach(b => b.onclick = () => { shelfFilter = b.dataset.filter; rerenderShelf(); });
+  const q = document.getElementById("q");
+  q.oninput = () => { shelfQuery = q.value; rerenderShelf(true); };
+  document.getElementById("sort").onchange = e => { shelfSort = e.target.value; rerenderShelf(); };
+}
+function rerenderShelf(keepFocus) {
+  const caret = keepFocus ? document.getElementById("q").selectionStart : null;
+  $app.innerHTML = viewShelf(); bindShelf();
+  if (keepFocus) { const q = document.getElementById("q"); q.focus(); q.setSelectionRange(caret, caret); }
+}
+
+function bindBook(id) {
+  const hide = document.getElementById("hide");
+  if (hide) hide.onchange = () => {
+    hideMine = hide.checked;
+    try { localStorage.setItem("hideMine", hideMine ? "1" : "0"); } catch (e) {}
+    render({keep: true});
+  };
+  const btn = document.getElementById("expand");
+  if (btn) btn.onclick = () => startExpand(id, document.getElementById("readers").value);
+}
+
+async function startExpand(id, readers) {
+  try {
+    await api(`/api/expand?id=${encodeURIComponent(id)}&readers=${readers}`, {method: "POST"});
+  } catch (e) { alert(e.message); return; }
+  await loadState();
+  lastRunning = true;
+  await render({keep: true});
+  poll();
+}
+
+function showJob(j) {
+  const el = document.getElementById("job");
+  el.classList.toggle("on", !!j.running);
+  if (j.running) {
+    const t = j.title ? `“${j.title}”` : "o grafo";
+    document.getElementById("jobText").textContent = j.total
+      ? `Expandindo ${t}: ${j.done}/${j.total} estantes (salva e atualiza as páginas ao terminar)`
+      : `Expandindo ${t}: buscando leitores…`;
+    document.getElementById("jobBar").style.width = j.total ? (j.done / j.total * 100) + "%" : "4%";
+  }
+}
+
+// Verificação contínua: qualquer aba aberta recarrega quando o grafo muda
+// (expansão concluída aqui ou em outra aba, ou uma expansão começou).
+let pollTimer = 0, lastRunning = false;
+async function poll() {
+  clearTimeout(pollTimer);
+  try {
+    const j = await api("/api/job");
+    showJob(j);
+    const finished = lastRunning && !j.running;
+    if (j.version !== S.version || j.running !== lastRunning) {
+      lastRunning = j.running;
+      await loadState();
+      const typing = document.activeElement && document.activeElement.id === "q";
+      if (!typing) await render({keep: true});
+    }
+    if (finished && j.error) alert("A expansão terminou com erro: " + j.error);
+    if (finished && j.canceled) alert(`Expansão cancelada. ${j.added} estantes novas foram salvas.`);
+  } catch (e) { /* servidor parado: tenta de novo */ }
+  pollTimer = setTimeout(poll, lastRunning ? 1500 : 4000);
+}
+
+async function loadState() {
+  S = await api("/api/state");
+  document.getElementById("stats").textContent =
+    `${S.users.toLocaleString("pt-BR")} leitores · ${S.books.toLocaleString("pt-BR")} livros no grafo`;
+  showJob(S.job || {});
+}
+
+document.getElementById("jobCancel").onclick = async e => {
+  e.target.disabled = true;
+  try { await api("/api/expand", {method: "DELETE"}); } catch (err) { /* já terminou */ }
+  e.target.disabled = false;
+  poll();
+};
+
+window.addEventListener("hashchange", () => render());
+loadState().then(() => { lastRunning = !!(S.job && S.job.running); render(); poll(); })
+  .catch(e => { $app.innerHTML = `<p class="empty">Erro ao carregar: ${esc(e.message)}</p>`; });
+</script>
+</body>
+</html>

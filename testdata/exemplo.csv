@@ -1,0 +1,547 @@
+user_id,book_id,title,author,rating,read_at
+530077,duna,Duna,Frank Herbert,5,2026-10-01
+530077,fundacao,Fundação,Isaac Asimov,4.5,2026-08-15
+530077,sapiens,Sapiens,Yuval Noah Harari,4,2026-05-10
+530077,cosmos,Cosmos,Carl Sagan,5,2025-12-01
+530077,romance1,Amor em Paris,Autora Exemplo,1.5,2023-03-01
+530077,senhor,O Senhor dos Anéis,J.R.R. Tolkien,3,2022-06-01
+leitor000,3corpos,O Problema dos Três Corpos,Cixin Liu,4.5,2026-01-03
+leitor000,armas,"Armas, Germes e Aço",Jared Diamond,5,2026-07-14
+leitor000,fundacao,Fundação,Isaac Asimov,4.0,2026-07-02
+leitor000,romance1,Amor em Paris,Autora Exemplo,2.0,2026-10-04
+leitor000,cosmos,Cosmos,Carl Sagan,5,2026-10-02
+leitor000,mistborn,Mistborn,Brandon Sanderson,1.5,2026-10-19
+leitor000,habito,O Poder do Hábito,Charles Duhigg,3.0,2026-01-18
+leitor000,marciano,Perdido em Marte,Andy Weir,5,2026-03-10
+leitor000,got,A Guerra dos Tronos,George R.R. Martin,1.5,2026-10-10
+leitor001,hyperion,Hyperion,Dan Simmons,4.0,2026-10-07
+leitor001,senhor,O Senhor dos Anéis,J.R.R. Tolkien,4.0,2026-06-15
+leitor001,rapido,Rápido e Devagar,Daniel Kahneman,2.0,2026-10-15
+leitor001,fundacao,Fundação,Isaac Asimov,3.5,2026-03-23
+leitor001,mistborn,Mistborn,Brandon Sanderson,5,2026-04-03
+leitor001,romance1,Amor em Paris,Autora Exemplo,1.5,2026-06-24
+leitor001,habito,O Poder do Hábito,Charles Duhigg,1.5,2026-08-10
+leitor001,got,A Guerra dos Tronos,George R.R. Martin,4.5,2026-09-14
+leitor001,duna,Duna,Frank Herbert,3.5,2026-03-25
+leitor002,3corpos,O Problema dos Três Corpos,Cixin Liu,3.5,2026-08-19
+leitor002,romance1,Amor em Paris,Autora Exemplo,2.5,2026-08-03
+leitor002,cosmos,Cosmos,Carl Sagan,5,2026-08-23
+leitor002,duna,Duna,Frank Herbert,2.5,2026-02-02
+leitor002,sapiens,Sapiens,Yuval Noah Harari,4.5,2026-10-22
+leitor002,fundacao,Fundação,Isaac Asimov,3.5,2026-08-10
+leitor002,mistborn,Mistborn,Brandon Sanderson,1.5,2026-06-01
+leitor002,got,A Guerra dos Tronos,George R.R. Martin,1.0,2026-08-12
+leitor002,marciano,Perdido em Marte,Andy Weir,4.0,2026-01-07
+leitor003,3corpos,O Problema dos Três Corpos,Cixin Liu,4.0,2026-07-18
+leitor003,nome_vento,O Nome do Vento,Patrick Rothfuss,2.0,2026-07-28
+leitor003,armas,"Armas, Germes e Aço",Jared Diamond,5,2026-09-09
+leitor003,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.5,2026-07-08
+leitor003,cosmos,Cosmos,Carl Sagan,3.0,2026-03-03
+leitor003,romance2,Verão Inesquecível,Autora Exemplo,2.0,2026-04-01
+leitor003,fundacao,Fundação,Isaac Asimov,4.0,2026-08-27
+leitor003,neuromancer,Neuromancer,William Gibson,3.5,2026-01-05
+leitor003,romance1,Amor em Paris,Autora Exemplo,2.0,2026-07-18
+leitor004,sapiens,Sapiens,Yuval Noah Harari,4.0,2026-08-21
+leitor004,3corpos,O Problema dos Três Corpos,Cixin Liu,4.0,2026-07-02
+leitor004,fundacao,Fundação,Isaac Asimov,4.5,2026-08-06
+leitor004,nome_vento,O Nome do Vento,Patrick Rothfuss,3.5,2026-02-11
+leitor004,cosmos,Cosmos,Carl Sagan,4.5,2026-10-05
+leitor004,armas,"Armas, Germes e Aço",Jared Diamond,4.5,2026-09-04
+leitor004,romance3,Cartas de Amor,Autora Exemplo,3.0,2026-02-28
+leitor004,mistborn,Mistborn,Brandon Sanderson,1.5,2026-04-20
+leitor004,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.5,2026-06-20
+leitor005,romance1,Amor em Paris,Autora Exemplo,2.5,2026-02-05
+leitor005,hyperion,Hyperion,Dan Simmons,4.0,2026-05-16
+leitor005,romance2,Verão Inesquecível,Autora Exemplo,2.5,2026-03-17
+leitor005,cosmos,Cosmos,Carl Sagan,5,2026-09-12
+leitor005,nome_vento,O Nome do Vento,Patrick Rothfuss,2.0,2026-03-23
+leitor005,habito,O Poder do Hábito,Charles Duhigg,4.5,2026-09-10
+leitor005,armas,"Armas, Germes e Aço",Jared Diamond,4.5,2026-02-23
+leitor005,rapido,Rápido e Devagar,Daniel Kahneman,5,2026-03-12
+leitor005,3corpos,O Problema dos Três Corpos,Cixin Liu,3.0,2026-04-18
+leitor006,nome_vento,O Nome do Vento,Patrick Rothfuss,1.0,2026-01-26
+leitor006,senhor,O Senhor dos Anéis,J.R.R. Tolkien,2.0,2026-05-16
+leitor006,romance3,Cartas de Amor,Autora Exemplo,2.0,2026-06-15
+leitor006,cosmos,Cosmos,Carl Sagan,5,2026-06-12
+leitor006,romance2,Verão Inesquecível,Autora Exemplo,2.0,2026-08-07
+leitor006,rapido,Rápido e Devagar,Daniel Kahneman,4.5,2026-06-07
+leitor006,hyperion,Hyperion,Dan Simmons,2.0,2026-10-27
+leitor006,armas,"Armas, Germes e Aço",Jared Diamond,4.5,2026-01-16
+leitor006,mistborn,Mistborn,Brandon Sanderson,2.5,2026-02-27
+leitor007,armas,"Armas, Germes e Aço",Jared Diamond,3.5,2026-07-15
+leitor007,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.0,2026-03-06
+leitor007,romance1,Amor em Paris,Autora Exemplo,3.0,2026-03-01
+leitor007,habito,O Poder do Hábito,Charles Duhigg,4.5,2026-03-20
+leitor007,neuromancer,Neuromancer,William Gibson,5,2026-10-16
+leitor007,romance2,Verão Inesquecível,Autora Exemplo,1.5,2026-09-18
+leitor007,sapiens,Sapiens,Yuval Noah Harari,3.5,2026-03-01
+leitor007,marciano,Perdido em Marte,Andy Weir,5,2026-02-17
+leitor007,fundacao,Fundação,Isaac Asimov,4.5,2026-03-14
+leitor008,senhor,O Senhor dos Anéis,J.R.R. Tolkien,4.5,2026-03-02
+leitor008,duna,Duna,Frank Herbert,4.5,2026-06-15
+leitor008,mistborn,Mistborn,Brandon Sanderson,4.0,2026-09-14
+leitor008,hyperion,Hyperion,Dan Simmons,3.0,2026-09-05
+leitor008,3corpos,O Problema dos Três Corpos,Cixin Liu,3.0,2026-01-28
+leitor008,romance1,Amor em Paris,Autora Exemplo,2.0,2026-08-25
+leitor008,habito,O Poder do Hábito,Charles Duhigg,2.0,2026-03-06
+leitor008,got,A Guerra dos Tronos,George R.R. Martin,4.5,2026-03-16
+leitor008,marciano,Perdido em Marte,Andy Weir,3.5,2026-01-11
+leitor009,hyperion,Hyperion,Dan Simmons,2.0,2026-09-01
+leitor009,fundacao,Fundação,Isaac Asimov,2.0,2026-08-11
+leitor009,nome_vento,O Nome do Vento,Patrick Rothfuss,0.5,2026-10-17
+leitor009,romance3,Cartas de Amor,Autora Exemplo,4.0,2026-05-15
+leitor009,3corpos,O Problema dos Três Corpos,Cixin Liu,2.0,2026-09-18
+leitor009,duna,Duna,Frank Herbert,2.5,2026-04-23
+leitor009,romance2,Verão Inesquecível,Autora Exemplo,4.0,2026-09-09
+leitor009,mistborn,Mistborn,Brandon Sanderson,3.0,2026-04-27
+leitor009,romance1,Amor em Paris,Autora Exemplo,4.0,2026-08-05
+leitor010,hyperion,Hyperion,Dan Simmons,2.0,2026-02-25
+leitor010,armas,"Armas, Germes e Aço",Jared Diamond,2.5,2026-03-23
+leitor010,habito,O Poder do Hábito,Charles Duhigg,1.5,2026-05-05
+leitor010,marciano,Perdido em Marte,Andy Weir,1.5,2026-08-08
+leitor010,fundacao,Fundação,Isaac Asimov,2.0,2026-08-06
+leitor010,sapiens,Sapiens,Yuval Noah Harari,1.5,2026-04-06
+leitor010,romance3,Cartas de Amor,Autora Exemplo,4.0,2026-07-11
+leitor010,senhor,O Senhor dos Anéis,J.R.R. Tolkien,0.5,2026-07-07
+leitor010,cosmos,Cosmos,Carl Sagan,2.0,2026-06-01
+leitor011,romance3,Cartas de Amor,Autora Exemplo,2.0,2026-05-17
+leitor011,habito,O Poder do Hábito,Charles Duhigg,5,2026-04-04
+leitor011,romance2,Verão Inesquecível,Autora Exemplo,2.0,2026-02-09
+leitor011,rapido,Rápido e Devagar,Daniel Kahneman,4.5,2026-03-09
+leitor011,duna,Duna,Frank Herbert,5,2026-03-27
+leitor011,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.0,2026-05-13
+leitor011,marciano,Perdido em Marte,Andy Weir,4.5,2026-03-18
+leitor011,mistborn,Mistborn,Brandon Sanderson,2.5,2026-06-03
+leitor011,got,A Guerra dos Tronos,George R.R. Martin,1.5,2026-05-02
+leitor012,cosmos,Cosmos,Carl Sagan,2.0,2026-02-15
+leitor012,neuromancer,Neuromancer,William Gibson,3.5,2026-01-11
+leitor012,mistborn,Mistborn,Brandon Sanderson,5,2026-05-20
+leitor012,duna,Duna,Frank Herbert,4.0,2026-03-02
+leitor012,sapiens,Sapiens,Yuval Noah Harari,1.5,2026-02-06
+leitor012,fundacao,Fundação,Isaac Asimov,3.5,2026-05-02
+leitor012,3corpos,O Problema dos Três Corpos,Cixin Liu,4.5,2026-05-17
+leitor012,armas,"Armas, Germes e Aço",Jared Diamond,3.5,2026-04-10
+leitor012,got,A Guerra dos Tronos,George R.R. Martin,3.5,2026-05-12
+leitor013,mistborn,Mistborn,Brandon Sanderson,2.5,2026-08-08
+leitor013,fundacao,Fundação,Isaac Asimov,5,2026-07-22
+leitor013,duna,Duna,Frank Herbert,4.5,2026-08-18
+leitor013,romance1,Amor em Paris,Autora Exemplo,2.5,2026-09-10
+leitor013,rapido,Rápido e Devagar,Daniel Kahneman,3.5,2026-04-08
+leitor013,romance3,Cartas de Amor,Autora Exemplo,1.5,2026-03-13
+leitor013,armas,"Armas, Germes e Aço",Jared Diamond,4.5,2026-06-02
+leitor013,hyperion,Hyperion,Dan Simmons,4.5,2026-05-14
+leitor013,cosmos,Cosmos,Carl Sagan,3.5,2026-03-02
+leitor014,armas,"Armas, Germes e Aço",Jared Diamond,4.0,2026-01-09
+leitor014,romance2,Verão Inesquecível,Autora Exemplo,2.5,2026-06-11
+leitor014,got,A Guerra dos Tronos,George R.R. Martin,2.5,2026-04-02
+leitor014,romance1,Amor em Paris,Autora Exemplo,2.0,2026-05-07
+leitor014,hyperion,Hyperion,Dan Simmons,4.5,2026-07-03
+leitor014,rapido,Rápido e Devagar,Daniel Kahneman,4.0,2026-08-09
+leitor014,3corpos,O Problema dos Três Corpos,Cixin Liu,4.0,2026-09-25
+leitor014,duna,Duna,Frank Herbert,4.5,2026-01-03
+leitor014,nome_vento,O Nome do Vento,Patrick Rothfuss,2.0,2026-07-19
+leitor015,armas,"Armas, Germes e Aço",Jared Diamond,4.0,2026-03-22
+leitor015,duna,Duna,Frank Herbert,5,2026-10-13
+leitor015,got,A Guerra dos Tronos,George R.R. Martin,1.5,2026-06-24
+leitor015,3corpos,O Problema dos Três Corpos,Cixin Liu,5,2026-10-21
+leitor015,sapiens,Sapiens,Yuval Noah Harari,4.0,2026-03-02
+leitor015,hyperion,Hyperion,Dan Simmons,5,2026-09-21
+leitor015,fundacao,Fundação,Isaac Asimov,3.5,2026-07-24
+leitor015,romance1,Amor em Paris,Autora Exemplo,2.0,2026-09-25
+leitor015,mistborn,Mistborn,Brandon Sanderson,1.5,2026-09-19
+leitor016,nome_vento,O Nome do Vento,Patrick Rothfuss,2.5,2026-01-21
+leitor016,neuromancer,Neuromancer,William Gibson,4.0,2026-09-22
+leitor016,duna,Duna,Frank Herbert,4.5,2026-08-26
+leitor016,romance1,Amor em Paris,Autora Exemplo,2.5,2026-02-24
+leitor016,romance2,Verão Inesquecível,Autora Exemplo,3.0,2026-02-22
+leitor016,sapiens,Sapiens,Yuval Noah Harari,3.5,2026-09-03
+leitor016,marciano,Perdido em Marte,Andy Weir,4.5,2026-02-28
+leitor016,fundacao,Fundação,Isaac Asimov,4.0,2026-05-08
+leitor016,senhor,O Senhor dos Anéis,J.R.R. Tolkien,2.0,2026-08-16
+leitor017,neuromancer,Neuromancer,William Gibson,1.5,2026-02-20
+leitor017,romance1,Amor em Paris,Autora Exemplo,5,2026-05-20
+leitor017,got,A Guerra dos Tronos,George R.R. Martin,2.5,2026-10-05
+leitor017,armas,"Armas, Germes e Aço",Jared Diamond,2.0,2026-05-22
+leitor017,duna,Duna,Frank Herbert,2.0,2026-02-23
+leitor017,romance2,Verão Inesquecível,Autora Exemplo,4.5,2026-09-10
+leitor017,sapiens,Sapiens,Yuval Noah Harari,2.5,2026-08-15
+leitor017,rapido,Rápido e Devagar,Daniel Kahneman,1.5,2026-09-07
+leitor017,hyperion,Hyperion,Dan Simmons,2.0,2026-05-03
+leitor018,duna,Duna,Frank Herbert,2.5,2026-04-03
+leitor018,got,A Guerra dos Tronos,George R.R. Martin,3.5,2026-10-03
+leitor018,habito,O Poder do Hábito,Charles Duhigg,2.5,2026-06-05
+leitor018,fundacao,Fundação,Isaac Asimov,2.5,2026-10-27
+leitor018,cosmos,Cosmos,Carl Sagan,1.5,2026-02-23
+leitor018,mistborn,Mistborn,Brandon Sanderson,1.5,2026-06-08
+leitor018,nome_vento,O Nome do Vento,Patrick Rothfuss,1.0,2026-07-01
+leitor018,3corpos,O Problema dos Três Corpos,Cixin Liu,2.0,2026-03-01
+leitor018,senhor,O Senhor dos Anéis,J.R.R. Tolkien,3.0,2026-07-10
+leitor019,cosmos,Cosmos,Carl Sagan,1.5,2026-07-04
+leitor019,rapido,Rápido e Devagar,Daniel Kahneman,2.5,2026-01-24
+leitor019,armas,"Armas, Germes e Aço",Jared Diamond,2.0,2026-05-09
+leitor019,marciano,Perdido em Marte,Andy Weir,3.5,2026-10-03
+leitor019,fundacao,Fundação,Isaac Asimov,4.0,2026-06-14
+leitor019,habito,O Poder do Hábito,Charles Duhigg,2.0,2026-05-04
+leitor019,duna,Duna,Frank Herbert,2.5,2026-01-27
+leitor019,romance1,Amor em Paris,Autora Exemplo,1.5,2026-03-08
+leitor019,sapiens,Sapiens,Yuval Noah Harari,1.5,2026-05-14
+leitor020,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.0,2026-01-24
+leitor020,rapido,Rápido e Devagar,Daniel Kahneman,4.0,2026-07-15
+leitor020,cosmos,Cosmos,Carl Sagan,4.5,2026-05-16
+leitor020,habito,O Poder do Hábito,Charles Duhigg,4.5,2026-01-18
+leitor020,duna,Duna,Frank Herbert,4.5,2026-06-10
+leitor020,armas,"Armas, Germes e Aço",Jared Diamond,5,2026-05-09
+leitor020,sapiens,Sapiens,Yuval Noah Harari,4.5,2026-05-13
+leitor020,romance3,Cartas de Amor,Autora Exemplo,0.5,2026-04-10
+leitor020,mistborn,Mistborn,Brandon Sanderson,1.0,2026-02-06
+leitor021,neuromancer,Neuromancer,William Gibson,4.0,2026-03-18
+leitor021,senhor,O Senhor dos Anéis,J.R.R. Tolkien,4.5,2026-06-18
+leitor021,romance1,Amor em Paris,Autora Exemplo,2.0,2026-02-11
+leitor021,mistborn,Mistborn,Brandon Sanderson,4.5,2026-10-07
+leitor021,hyperion,Hyperion,Dan Simmons,4.5,2026-01-24
+leitor021,nome_vento,O Nome do Vento,Patrick Rothfuss,5,2026-09-07
+leitor021,marciano,Perdido em Marte,Andy Weir,3.5,2026-07-09
+leitor021,armas,"Armas, Germes e Aço",Jared Diamond,2.0,2026-05-19
+leitor021,romance2,Verão Inesquecível,Autora Exemplo,2.0,2026-06-05
+leitor022,neuromancer,Neuromancer,William Gibson,4.5,2026-01-05
+leitor022,mistborn,Mistborn,Brandon Sanderson,3.5,2026-01-14
+leitor022,nome_vento,O Nome do Vento,Patrick Rothfuss,4.0,2026-08-19
+leitor022,senhor,O Senhor dos Anéis,J.R.R. Tolkien,3.5,2026-08-01
+leitor022,habito,O Poder do Hábito,Charles Duhigg,3.0,2026-09-28
+leitor022,sapiens,Sapiens,Yuval Noah Harari,2.5,2026-08-15
+leitor022,romance1,Amor em Paris,Autora Exemplo,2.0,2026-03-05
+leitor022,cosmos,Cosmos,Carl Sagan,2.5,2026-09-22
+leitor022,3corpos,O Problema dos Três Corpos,Cixin Liu,4.5,2026-08-03
+leitor023,duna,Duna,Frank Herbert,5,2026-05-17
+leitor023,3corpos,O Problema dos Três Corpos,Cixin Liu,4.0,2026-02-04
+leitor023,nome_vento,O Nome do Vento,Patrick Rothfuss,1.5,2026-02-10
+leitor023,got,A Guerra dos Tronos,George R.R. Martin,1.0,2026-07-09
+leitor023,romance3,Cartas de Amor,Autora Exemplo,2.0,2026-04-26
+leitor023,sapiens,Sapiens,Yuval Noah Harari,3.5,2026-05-15
+leitor023,rapido,Rápido e Devagar,Daniel Kahneman,3.5,2026-05-11
+leitor023,romance2,Verão Inesquecível,Autora Exemplo,1.0,2026-08-17
+leitor023,neuromancer,Neuromancer,William Gibson,3.5,2026-04-18
+leitor024,duna,Duna,Frank Herbert,4.0,2026-07-12
+leitor024,cosmos,Cosmos,Carl Sagan,2.0,2026-04-16
+leitor024,got,A Guerra dos Tronos,George R.R. Martin,5,2026-07-12
+leitor024,romance3,Cartas de Amor,Autora Exemplo,2.0,2026-07-07
+leitor024,habito,O Poder do Hábito,Charles Duhigg,2.5,2026-09-03
+leitor024,hyperion,Hyperion,Dan Simmons,4.0,2026-04-16
+leitor024,nome_vento,O Nome do Vento,Patrick Rothfuss,5,2026-04-08
+leitor024,sapiens,Sapiens,Yuval Noah Harari,2.0,2026-08-08
+leitor024,senhor,O Senhor dos Anéis,J.R.R. Tolkien,4.5,2026-02-20
+leitor025,marciano,Perdido em Marte,Andy Weir,3.5,2026-01-07
+leitor025,nome_vento,O Nome do Vento,Patrick Rothfuss,3.0,2026-07-02
+leitor025,romance1,Amor em Paris,Autora Exemplo,4.5,2026-01-06
+leitor025,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.0,2026-06-24
+leitor025,sapiens,Sapiens,Yuval Noah Harari,3.0,2026-02-03
+leitor025,duna,Duna,Frank Herbert,2.5,2026-03-21
+leitor025,got,A Guerra dos Tronos,George R.R. Martin,2.0,2026-09-24
+leitor025,neuromancer,Neuromancer,William Gibson,1.5,2026-07-27
+leitor025,habito,O Poder do Hábito,Charles Duhigg,2.0,2026-06-11
+leitor026,marciano,Perdido em Marte,Andy Weir,1.0,2026-07-12
+leitor026,hyperion,Hyperion,Dan Simmons,1.5,2026-05-27
+leitor026,duna,Duna,Frank Herbert,2.0,2026-08-07
+leitor026,fundacao,Fundação,Isaac Asimov,2.0,2026-06-18
+leitor026,3corpos,O Problema dos Três Corpos,Cixin Liu,2.5,2026-06-24
+leitor026,habito,O Poder do Hábito,Charles Duhigg,2.0,2026-08-01
+leitor026,romance3,Cartas de Amor,Autora Exemplo,4.0,2026-07-02
+leitor026,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.5,2026-07-02
+leitor026,armas,"Armas, Germes e Aço",Jared Diamond,1.0,2026-01-09
+leitor027,neuromancer,Neuromancer,William Gibson,4.0,2026-05-10
+leitor027,sapiens,Sapiens,Yuval Noah Harari,3.0,2026-02-01
+leitor027,rapido,Rápido e Devagar,Daniel Kahneman,2.0,2026-04-04
+leitor027,3corpos,O Problema dos Três Corpos,Cixin Liu,2.5,2026-07-26
+leitor027,marciano,Perdido em Marte,Andy Weir,4.0,2026-05-14
+leitor027,got,A Guerra dos Tronos,George R.R. Martin,4.5,2026-08-06
+leitor027,duna,Duna,Frank Herbert,3.5,2026-01-26
+leitor027,habito,O Poder do Hábito,Charles Duhigg,2.5,2026-03-20
+leitor027,cosmos,Cosmos,Carl Sagan,2.0,2026-04-11
+leitor028,habito,O Poder do Hábito,Charles Duhigg,4.5,2026-09-18
+leitor028,rapido,Rápido e Devagar,Daniel Kahneman,4.5,2026-06-06
+leitor028,neuromancer,Neuromancer,William Gibson,5,2026-02-09
+leitor028,mistborn,Mistborn,Brandon Sanderson,2.0,2026-10-03
+leitor028,hyperion,Hyperion,Dan Simmons,4.0,2026-08-06
+leitor028,senhor,O Senhor dos Anéis,J.R.R. Tolkien,2.5,2026-04-05
+leitor028,romance1,Amor em Paris,Autora Exemplo,1.5,2026-04-24
+leitor028,cosmos,Cosmos,Carl Sagan,5,2026-09-28
+leitor028,armas,"Armas, Germes e Aço",Jared Diamond,4.5,2026-05-10
+leitor029,mistborn,Mistborn,Brandon Sanderson,1.0,2026-04-08
+leitor029,rapido,Rápido e Devagar,Daniel Kahneman,5,2026-10-07
+leitor029,romance3,Cartas de Amor,Autora Exemplo,3.0,2026-06-03
+leitor029,romance2,Verão Inesquecível,Autora Exemplo,0.5,2026-09-17
+leitor029,3corpos,O Problema dos Três Corpos,Cixin Liu,5,2026-04-21
+leitor029,hyperion,Hyperion,Dan Simmons,4.0,2026-01-04
+leitor029,nome_vento,O Nome do Vento,Patrick Rothfuss,1.0,2026-01-16
+leitor029,armas,"Armas, Germes e Aço",Jared Diamond,5,2026-08-12
+leitor029,neuromancer,Neuromancer,William Gibson,3.5,2026-01-10
+leitor030,hyperion,Hyperion,Dan Simmons,3.5,2026-10-09
+leitor030,fundacao,Fundação,Isaac Asimov,4.0,2026-01-04
+leitor030,senhor,O Senhor dos Anéis,J.R.R. Tolkien,4.0,2026-06-07
+leitor030,got,A Guerra dos Tronos,George R.R. Martin,4.0,2026-01-12
+leitor030,cosmos,Cosmos,Carl Sagan,2.0,2026-05-02
+leitor030,habito,O Poder do Hábito,Charles Duhigg,2.0,2026-10-24
+leitor030,romance3,Cartas de Amor,Autora Exemplo,2.0,2026-01-27
+leitor030,romance2,Verão Inesquecível,Autora Exemplo,1.5,2026-06-14
+leitor030,marciano,Perdido em Marte,Andy Weir,3.5,2026-05-03
+leitor031,fundacao,Fundação,Isaac Asimov,3.5,2026-03-21
+leitor031,romance1,Amor em Paris,Autora Exemplo,1.0,2026-07-23
+leitor031,romance2,Verão Inesquecível,Autora Exemplo,2.0,2026-05-14
+leitor031,romance3,Cartas de Amor,Autora Exemplo,3.0,2026-07-02
+leitor031,senhor,O Senhor dos Anéis,J.R.R. Tolkien,4.5,2026-05-24
+leitor031,habito,O Poder do Hábito,Charles Duhigg,1.5,2026-07-01
+leitor031,cosmos,Cosmos,Carl Sagan,2.0,2026-06-21
+leitor031,sapiens,Sapiens,Yuval Noah Harari,2.5,2026-04-01
+leitor031,mistborn,Mistborn,Brandon Sanderson,5,2026-07-06
+leitor032,hyperion,Hyperion,Dan Simmons,2.5,2026-07-03
+leitor032,neuromancer,Neuromancer,William Gibson,2.0,2026-10-20
+leitor032,armas,"Armas, Germes e Aço",Jared Diamond,3.0,2026-03-05
+leitor032,got,A Guerra dos Tronos,George R.R. Martin,1.5,2026-06-10
+leitor032,marciano,Perdido em Marte,Andy Weir,2.0,2026-02-04
+leitor032,nome_vento,O Nome do Vento,Patrick Rothfuss,2.5,2026-07-16
+leitor032,romance2,Verão Inesquecível,Autora Exemplo,4.5,2026-04-10
+leitor032,rapido,Rápido e Devagar,Daniel Kahneman,1.0,2026-03-27
+leitor032,duna,Duna,Frank Herbert,3.5,2026-08-11
+leitor033,armas,"Armas, Germes e Aço",Jared Diamond,3.0,2026-04-27
+leitor033,neuromancer,Neuromancer,William Gibson,3.5,2026-01-13
+leitor033,marciano,Perdido em Marte,Andy Weir,4.5,2026-09-06
+leitor033,sapiens,Sapiens,Yuval Noah Harari,3.5,2026-04-24
+leitor033,romance3,Cartas de Amor,Autora Exemplo,2.0,2026-04-02
+leitor033,hyperion,Hyperion,Dan Simmons,5,2026-01-22
+leitor033,got,A Guerra dos Tronos,George R.R. Martin,1.0,2026-06-04
+leitor033,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.5,2026-05-21
+leitor033,rapido,Rápido e Devagar,Daniel Kahneman,4.0,2026-07-10
+leitor034,cosmos,Cosmos,Carl Sagan,1.5,2026-04-15
+leitor034,armas,"Armas, Germes e Aço",Jared Diamond,1.5,2026-10-25
+leitor034,rapido,Rápido e Devagar,Daniel Kahneman,2.5,2026-08-13
+leitor034,nome_vento,O Nome do Vento,Patrick Rothfuss,3.5,2026-02-03
+leitor034,mistborn,Mistborn,Brandon Sanderson,5,2026-02-26
+leitor034,habito,O Poder do Hábito,Charles Duhigg,2.5,2026-08-17
+leitor034,neuromancer,Neuromancer,William Gibson,3.5,2026-03-03
+leitor034,duna,Duna,Frank Herbert,4.0,2026-06-25
+leitor034,sapiens,Sapiens,Yuval Noah Harari,2.0,2026-09-13
+leitor035,duna,Duna,Frank Herbert,3.5,2026-02-27
+leitor035,neuromancer,Neuromancer,William Gibson,3.0,2026-03-11
+leitor035,hyperion,Hyperion,Dan Simmons,4.5,2026-10-09
+leitor035,romance1,Amor em Paris,Autora Exemplo,2.5,2026-05-17
+leitor035,romance2,Verão Inesquecível,Autora Exemplo,1.5,2026-08-07
+leitor035,nome_vento,O Nome do Vento,Patrick Rothfuss,4.0,2026-04-11
+leitor035,3corpos,O Problema dos Três Corpos,Cixin Liu,3.5,2026-06-02
+leitor035,cosmos,Cosmos,Carl Sagan,2.0,2026-05-22
+leitor035,habito,O Poder do Hábito,Charles Duhigg,2.5,2026-06-13
+leitor036,mistborn,Mistborn,Brandon Sanderson,3.5,2026-02-09
+leitor036,hyperion,Hyperion,Dan Simmons,3.0,2026-09-21
+leitor036,fundacao,Fundação,Isaac Asimov,4.5,2026-06-09
+leitor036,sapiens,Sapiens,Yuval Noah Harari,1.0,2026-07-12
+leitor036,cosmos,Cosmos,Carl Sagan,1.5,2026-02-15
+leitor036,marciano,Perdido em Marte,Andy Weir,3.5,2026-04-06
+leitor036,nome_vento,O Nome do Vento,Patrick Rothfuss,3.5,2026-05-27
+leitor036,romance3,Cartas de Amor,Autora Exemplo,1.0,2026-09-09
+leitor036,habito,O Poder do Hábito,Charles Duhigg,1.5,2026-10-22
+leitor037,duna,Duna,Frank Herbert,5,2026-09-12
+leitor037,fundacao,Fundação,Isaac Asimov,4.0,2026-04-20
+leitor037,nome_vento,O Nome do Vento,Patrick Rothfuss,2.0,2026-01-01
+leitor037,neuromancer,Neuromancer,William Gibson,4.5,2026-05-04
+leitor037,3corpos,O Problema dos Três Corpos,Cixin Liu,4.0,2026-09-12
+leitor037,got,A Guerra dos Tronos,George R.R. Martin,1.5,2026-05-19
+leitor037,sapiens,Sapiens,Yuval Noah Harari,4.5,2026-03-07
+leitor037,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.0,2026-03-05
+leitor037,rapido,Rápido e Devagar,Daniel Kahneman,5,2026-01-26
+leitor038,3corpos,O Problema dos Três Corpos,Cixin Liu,4.5,2026-01-21
+leitor038,habito,O Poder do Hábito,Charles Duhigg,0.5,2026-09-12
+leitor038,hyperion,Hyperion,Dan Simmons,3.0,2026-10-17
+leitor038,fundacao,Fundação,Isaac Asimov,3.5,2026-08-08
+leitor038,sapiens,Sapiens,Yuval Noah Harari,2.0,2026-01-18
+leitor038,neuromancer,Neuromancer,William Gibson,4.0,2026-01-13
+leitor038,cosmos,Cosmos,Carl Sagan,2.0,2026-02-01
+leitor038,romance3,Cartas de Amor,Autora Exemplo,2.5,2026-10-18
+leitor038,senhor,O Senhor dos Anéis,J.R.R. Tolkien,4.5,2026-07-07
+leitor039,marciano,Perdido em Marte,Andy Weir,1.5,2026-01-13
+leitor039,romance2,Verão Inesquecível,Autora Exemplo,5,2026-08-03
+leitor039,got,A Guerra dos Tronos,George R.R. Martin,1.0,2026-08-06
+leitor039,fundacao,Fundação,Isaac Asimov,2.0,2026-04-21
+leitor039,3corpos,O Problema dos Três Corpos,Cixin Liu,2.5,2026-01-04
+leitor039,sapiens,Sapiens,Yuval Noah Harari,1.5,2026-05-23
+leitor039,duna,Duna,Frank Herbert,3.0,2026-01-09
+leitor039,nome_vento,O Nome do Vento,Patrick Rothfuss,1.5,2026-09-09
+leitor039,mistborn,Mistborn,Brandon Sanderson,1.5,2026-05-21
+leitor040,neuromancer,Neuromancer,William Gibson,4.0,2026-07-11
+leitor040,romance2,Verão Inesquecível,Autora Exemplo,1.5,2026-10-08
+leitor040,duna,Duna,Frank Herbert,3.0,2026-09-16
+leitor040,romance3,Cartas de Amor,Autora Exemplo,3.0,2026-08-27
+leitor040,3corpos,O Problema dos Três Corpos,Cixin Liu,3.5,2026-01-14
+leitor040,hyperion,Hyperion,Dan Simmons,4.0,2026-04-19
+leitor040,rapido,Rápido e Devagar,Daniel Kahneman,3.0,2026-07-20
+leitor040,armas,"Armas, Germes e Aço",Jared Diamond,1.5,2026-10-03
+leitor040,habito,O Poder do Hábito,Charles Duhigg,1.5,2026-01-01
+leitor041,hyperion,Hyperion,Dan Simmons,4.5,2026-01-23
+leitor041,marciano,Perdido em Marte,Andy Weir,4.5,2026-10-25
+leitor041,rapido,Rápido e Devagar,Daniel Kahneman,4.0,2026-06-07
+leitor041,neuromancer,Neuromancer,William Gibson,5,2026-02-28
+leitor041,romance1,Amor em Paris,Autora Exemplo,1.0,2026-07-04
+leitor041,duna,Duna,Frank Herbert,4.5,2026-01-02
+leitor041,armas,"Armas, Germes e Aço",Jared Diamond,4.0,2026-02-27
+leitor041,cosmos,Cosmos,Carl Sagan,4.0,2026-08-04
+leitor041,habito,O Poder do Hábito,Charles Duhigg,3.0,2026-03-04
+leitor042,got,A Guerra dos Tronos,George R.R. Martin,5,2026-06-25
+leitor042,sapiens,Sapiens,Yuval Noah Harari,2.5,2026-10-17
+leitor042,romance2,Verão Inesquecível,Autora Exemplo,1.5,2026-01-26
+leitor042,senhor,O Senhor dos Anéis,J.R.R. Tolkien,4.5,2026-07-01
+leitor042,3corpos,O Problema dos Três Corpos,Cixin Liu,3.0,2026-06-16
+leitor042,duna,Duna,Frank Herbert,4.0,2026-01-18
+leitor042,marciano,Perdido em Marte,Andy Weir,3.0,2026-02-19
+leitor042,cosmos,Cosmos,Carl Sagan,1.5,2026-05-06
+leitor042,romance1,Amor em Paris,Autora Exemplo,1.5,2026-05-25
+leitor043,duna,Duna,Frank Herbert,5,2026-06-27
+leitor043,rapido,Rápido e Devagar,Daniel Kahneman,3.0,2026-03-10
+leitor043,romance1,Amor em Paris,Autora Exemplo,2.0,2026-04-23
+leitor043,fundacao,Fundação,Isaac Asimov,4.5,2026-02-16
+leitor043,nome_vento,O Nome do Vento,Patrick Rothfuss,2.5,2026-09-26
+leitor043,romance2,Verão Inesquecível,Autora Exemplo,2.5,2026-02-13
+leitor043,neuromancer,Neuromancer,William Gibson,5,2026-07-24
+leitor043,cosmos,Cosmos,Carl Sagan,5,2026-01-12
+leitor043,got,A Guerra dos Tronos,George R.R. Martin,2.5,2026-04-10
+leitor044,cosmos,Cosmos,Carl Sagan,3.5,2026-10-21
+leitor044,romance2,Verão Inesquecível,Autora Exemplo,1.5,2026-01-12
+leitor044,marciano,Perdido em Marte,Andy Weir,3.0,2026-08-22
+leitor044,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.5,2026-09-24
+leitor044,sapiens,Sapiens,Yuval Noah Harari,4.0,2026-05-19
+leitor044,hyperion,Hyperion,Dan Simmons,4.5,2026-04-05
+leitor044,nome_vento,O Nome do Vento,Patrick Rothfuss,1.5,2026-04-17
+leitor044,neuromancer,Neuromancer,William Gibson,4.5,2026-04-09
+leitor044,mistborn,Mistborn,Brandon Sanderson,1.5,2026-10-05
+leitor045,nome_vento,O Nome do Vento,Patrick Rothfuss,5,2026-03-22
+leitor045,sapiens,Sapiens,Yuval Noah Harari,2.5,2026-03-26
+leitor045,rapido,Rápido e Devagar,Daniel Kahneman,2.5,2026-05-24
+leitor045,neuromancer,Neuromancer,William Gibson,3.5,2026-02-21
+leitor045,hyperion,Hyperion,Dan Simmons,4.5,2026-02-09
+leitor045,marciano,Perdido em Marte,Andy Weir,4.0,2026-01-01
+leitor045,cosmos,Cosmos,Carl Sagan,2.5,2026-07-28
+leitor045,3corpos,O Problema dos Três Corpos,Cixin Liu,4.0,2026-09-21
+leitor045,fundacao,Fundação,Isaac Asimov,3.0,2026-05-15
+leitor046,3corpos,O Problema dos Três Corpos,Cixin Liu,4.5,2026-04-22
+leitor046,mistborn,Mistborn,Brandon Sanderson,1.5,2026-10-28
+leitor046,armas,"Armas, Germes e Aço",Jared Diamond,4.0,2026-02-15
+leitor046,duna,Duna,Frank Herbert,5,2026-07-11
+leitor046,rapido,Rápido e Devagar,Daniel Kahneman,3.5,2026-07-08
+leitor046,hyperion,Hyperion,Dan Simmons,5,2026-07-23
+leitor046,senhor,O Senhor dos Anéis,J.R.R. Tolkien,2.0,2026-07-16
+leitor046,got,A Guerra dos Tronos,George R.R. Martin,1.5,2026-08-01
+leitor046,sapiens,Sapiens,Yuval Noah Harari,3.5,2026-03-21
+leitor047,duna,Duna,Frank Herbert,3.5,2026-03-23
+leitor047,armas,"Armas, Germes e Aço",Jared Diamond,5,2026-09-12
+leitor047,romance1,Amor em Paris,Autora Exemplo,0.5,2026-02-28
+leitor047,habito,O Poder do Hábito,Charles Duhigg,4.0,2026-08-17
+leitor047,fundacao,Fundação,Isaac Asimov,3.5,2026-01-21
+leitor047,romance3,Cartas de Amor,Autora Exemplo,2.0,2026-06-14
+leitor047,3corpos,O Problema dos Três Corpos,Cixin Liu,3.0,2026-08-07
+leitor047,mistborn,Mistborn,Brandon Sanderson,2.5,2026-09-25
+leitor047,hyperion,Hyperion,Dan Simmons,4.0,2026-02-24
+leitor048,fundacao,Fundação,Isaac Asimov,4.5,2026-06-19
+leitor048,mistborn,Mistborn,Brandon Sanderson,1.5,2026-05-04
+leitor048,romance2,Verão Inesquecível,Autora Exemplo,2.0,2026-09-08
+leitor048,senhor,O Senhor dos Anéis,J.R.R. Tolkien,3.0,2026-07-15
+leitor048,habito,O Poder do Hábito,Charles Duhigg,4.5,2026-02-26
+leitor048,duna,Duna,Frank Herbert,4.0,2026-04-16
+leitor048,armas,"Armas, Germes e Aço",Jared Diamond,4.0,2026-03-12
+leitor048,romance3,Cartas de Amor,Autora Exemplo,1.5,2026-07-15
+leitor048,cosmos,Cosmos,Carl Sagan,5,2026-03-25
+leitor049,rapido,Rápido e Devagar,Daniel Kahneman,2.0,2026-08-01
+leitor049,nome_vento,O Nome do Vento,Patrick Rothfuss,2.5,2026-06-08
+leitor049,mistborn,Mistborn,Brandon Sanderson,1.0,2026-05-11
+leitor049,romance3,Cartas de Amor,Autora Exemplo,4.0,2026-02-22
+leitor049,senhor,O Senhor dos Anéis,J.R.R. Tolkien,2.0,2026-06-05
+leitor049,sapiens,Sapiens,Yuval Noah Harari,3.0,2026-01-03
+leitor049,3corpos,O Problema dos Três Corpos,Cixin Liu,1.5,2026-10-11
+leitor049,cosmos,Cosmos,Carl Sagan,2.0,2026-06-21
+leitor049,neuromancer,Neuromancer,William Gibson,1.5,2026-10-01
+leitor050,senhor,O Senhor dos Anéis,J.R.R. Tolkien,2.5,2026-03-07
+leitor050,neuromancer,Neuromancer,William Gibson,5,2026-07-26
+leitor050,got,A Guerra dos Tronos,George R.R. Martin,1.0,2026-10-26
+leitor050,3corpos,O Problema dos Três Corpos,Cixin Liu,4.5,2026-02-22
+leitor050,romance1,Amor em Paris,Autora Exemplo,2.5,2026-05-07
+leitor050,fundacao,Fundação,Isaac Asimov,4.0,2026-08-23
+leitor050,cosmos,Cosmos,Carl Sagan,4.0,2026-08-22
+leitor050,romance2,Verão Inesquecível,Autora Exemplo,2.0,2026-02-18
+leitor050,hyperion,Hyperion,Dan Simmons,5,2026-03-16
+leitor051,romance3,Cartas de Amor,Autora Exemplo,5,2026-03-18
+leitor051,fundacao,Fundação,Isaac Asimov,1.0,2026-03-27
+leitor051,romance1,Amor em Paris,Autora Exemplo,4.0,2026-06-15
+leitor051,nome_vento,O Nome do Vento,Patrick Rothfuss,2.0,2026-05-27
+leitor051,neuromancer,Neuromancer,William Gibson,1.5,2026-08-12
+leitor051,rapido,Rápido e Devagar,Daniel Kahneman,0.5,2026-02-06
+leitor051,habito,O Poder do Hábito,Charles Duhigg,3.0,2026-06-21
+leitor051,hyperion,Hyperion,Dan Simmons,2.0,2026-01-22
+leitor051,armas,"Armas, Germes e Aço",Jared Diamond,2.0,2026-06-26
+leitor052,romance2,Verão Inesquecível,Autora Exemplo,1.5,2026-06-11
+leitor052,romance1,Amor em Paris,Autora Exemplo,3.0,2026-08-25
+leitor052,romance3,Cartas de Amor,Autora Exemplo,1.0,2026-04-10
+leitor052,armas,"Armas, Germes e Aço",Jared Diamond,3.5,2026-07-11
+leitor052,neuromancer,Neuromancer,William Gibson,4.0,2026-05-10
+leitor052,duna,Duna,Frank Herbert,5,2026-06-27
+leitor052,hyperion,Hyperion,Dan Simmons,4.0,2026-05-28
+leitor052,senhor,O Senhor dos Anéis,J.R.R. Tolkien,2.0,2026-09-12
+leitor052,cosmos,Cosmos,Carl Sagan,4.5,2026-02-11
+leitor053,sapiens,Sapiens,Yuval Noah Harari,2.0,2026-07-18
+leitor053,got,A Guerra dos Tronos,George R.R. Martin,4.0,2026-02-01
+leitor053,3corpos,O Problema dos Três Corpos,Cixin Liu,3.5,2026-01-07
+leitor053,romance2,Verão Inesquecível,Autora Exemplo,2.5,2026-01-26
+leitor053,romance3,Cartas de Amor,Autora Exemplo,1.5,2026-09-18
+leitor053,fundacao,Fundação,Isaac Asimov,3.0,2026-10-22
+leitor053,duna,Duna,Frank Herbert,3.5,2026-02-07
+leitor053,senhor,O Senhor dos Anéis,J.R.R. Tolkien,5,2026-03-04
+leitor053,mistborn,Mistborn,Brandon Sanderson,4.5,2026-03-28
+leitor054,cosmos,Cosmos,Carl Sagan,4.0,2026-01-11
+leitor054,hyperion,Hyperion,Dan Simmons,4.0,2026-01-14
+leitor054,duna,Duna,Frank Herbert,4.0,2026-01-16
+leitor054,marciano,Perdido em Marte,Andy Weir,4.0,2026-10-17
+leitor054,romance3,Cartas de Amor,Autora Exemplo,2.5,2026-07-19
+leitor054,neuromancer,Neuromancer,William Gibson,4.5,2026-07-15
+leitor054,3corpos,O Problema dos Três Corpos,Cixin Liu,5,2026-10-19
+leitor054,mistborn,Mistborn,Brandon Sanderson,2.5,2026-03-16
+leitor054,rapido,Rápido e Devagar,Daniel Kahneman,4.0,2026-02-21
+leitor055,senhor,O Senhor dos Anéis,J.R.R. Tolkien,1.0,2026-02-07
+leitor055,3corpos,O Problema dos Três Corpos,Cixin Liu,2.0,2026-01-09
+leitor055,duna,Duna,Frank Herbert,2.0,2026-10-08
+leitor055,romance3,Cartas de Amor,Autora Exemplo,3.5,2026-01-12
+leitor055,romance1,Amor em Paris,Autora Exemplo,5,2026-03-24
+leitor055,cosmos,Cosmos,Carl Sagan,2.0,2026-09-23
+leitor055,sapiens,Sapiens,Yuval Noah Harari,1.5,2026-08-15
+leitor055,rapido,Rápido e Devagar,Daniel Kahneman,1.5,2026-01-23
+leitor055,fundacao,Fundação,Isaac Asimov,1.0,2026-01-01
+leitor056,duna,Duna,Frank Herbert,4.0,2026-10-24
+leitor056,neuromancer,Neuromancer,William Gibson,4.0,2026-08-16
+leitor056,armas,"Armas, Germes e Aço",Jared Diamond,3.5,2026-02-12
+leitor056,3corpos,O Problema dos Três Corpos,Cixin Liu,4.0,2026-03-21
+leitor056,habito,O Poder do Hábito,Charles Duhigg,4.0,2026-08-09
+leitor056,rapido,Rápido e Devagar,Daniel Kahneman,3.0,2026-10-11
+leitor056,got,A Guerra dos Tronos,George R.R. Martin,2.0,2026-10-11
+leitor056,romance2,Verão Inesquecível,Autora Exemplo,2.0,2026-10-24
+leitor056,nome_vento,O Nome do Vento,Patrick Rothfuss,3.0,2026-10-27
+leitor057,cosmos,Cosmos,Carl Sagan,4.5,2026-05-23
+leitor057,nome_vento,O Nome do Vento,Patrick Rothfuss,2.5,2026-07-06
+leitor057,armas,"Armas, Germes e Aço",Jared Diamond,4.5,2026-10-27
+leitor057,senhor,O Senhor dos Anéis,J.R.R. Tolkien,2.0,2026-05-27
+leitor057,sapiens,Sapiens,Yuval Noah Harari,3.5,2026-03-26
+leitor057,habito,O Poder do Hábito,Charles Duhigg,5,2026-03-09
+leitor057,got,A Guerra dos Tronos,George R.R. Martin,1.0,2026-09-22
+leitor057,hyperion,Hyperion,Dan Simmons,4.0,2026-09-03
+leitor057,romance2,Verão Inesquecível,Autora Exemplo,1.5,2026-09-18
+leitor058,armas,"Armas, Germes e Aço",Jared Diamond,1.5,2026-10-25
+leitor058,senhor,O Senhor dos Anéis,J.R.R. Tolkien,0.5,2026-01-26
+leitor058,nome_vento,O Nome do Vento,Patrick Rothfuss,1.5,2026-09-26
+leitor058,3corpos,O Problema dos Três Corpos,Cixin Liu,2.5,2026-06-25
+leitor058,got,A Guerra dos Tronos,George R.R. Martin,2.5,2026-09-09
+leitor058,duna,Duna,Frank Herbert,2.0,2026-09-11
+leitor058,sapiens,Sapiens,Yuval Noah Harari,1.0,2026-04-07
+leitor058,romance2,Verão Inesquecível,Autora Exemplo,4.5,2026-04-03
+leitor058,romance1,Amor em Paris,Autora Exemplo,5,2026-06-19
+leitor059,armas,"Armas, Germes e Aço",Jared Diamond,5,2026-08-26
+leitor059,romance2,Verão Inesquecível,Autora Exemplo,2.5,2026-01-12
+leitor059,3corpos,O Problema dos Três Corpos,Cixin Liu,4.0,2026-05-17
+leitor059,hyperion,Hyperion,Dan Simmons,3.5,2026-04-28
+leitor059,duna,Duna,Frank Herbert,3.5,2026-10-16
+leitor059,nome_vento,O Nome do Vento,Patrick Rothfuss,1.5,2026-05-14
+leitor059,marciano,Perdido em Marte,Andy Weir,3.5,2026-02-15
+leitor059,fundacao,Fundação,Isaac Asimov,4.0,2026-03-09
+leitor059,rapido,Rápido e Devagar,Daniel Kahneman,3.5,2026-01-11

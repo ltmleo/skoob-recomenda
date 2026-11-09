@@ -1,0 +1,31 @@
+# --- Dados reais do Skoob (seus e de terceiros): nunca versionar ---
+/skoob.csv
+/meus-livros.csv
+/recomendacoes.html
+*.expansoes.json
+# qualquer outro CSV gerado na raiz; dados de exemplo ficam em testdata/
+/*.csv
+
+# --- Credenciais ---
+# O token fica em ~/.config/recomendador/token, fora do repositório,
+# mas um export manual nunca deve entrar por engano.
+token
+*.token
+.env
+.env.*
+
+# --- Build e release ---
+/recomenda
+/recomenda.exe
+/dist/
+/build/
+*.test
+*.out
+*.prof
+
+# --- Editores e sistema ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

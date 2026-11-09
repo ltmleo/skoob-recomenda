@@ -1,0 +1,25 @@
+version: 2
+updates:
+  # Dependências Go: "fix(deps)" gera um release patch ao ser mergeado,
+  # para que correções de segurança cheguem aos binários publicados.
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: fix
+      include: scope
+    groups:
+      go:
+        patterns: ["*"]
+
+  # Actions do pipeline: "ci" não gera release.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns: ["*"]
