@@ -12,7 +12,8 @@ O `skoob-recomenda` instala o comando `recomenda`, que lê a sua estante, encont
 ## Destaques
 
 - **Híbrido user-KNN + item-KNN**: combina "quem lê como você" com "livros parecidos com os que você amou".
-- **Medido, não chutado**: `recomenda eval` compara os algoritmos com dados escondidos. O padrão atual tem o **dobro do nDCG** da versão original e bate o baseline de popularidade ([números](#qualidade)).
+- **Medido, não chutado**: `recomenda eval` compara os algoritmos com dados escondidos, em várias sementes e com intervalo de confiança. O padrão atual tem o **dobro do nDCG** da versão original ([números](#qualidade)).
+- **Nota geral do Skoob**: com `recomenda notas`, a nota prevista leva em conta a média de todos os leitores do site, não só dos coletados (erro médio 9% menor).
 - **App local** com recomendações, estante, grafo interativo dos seus livros e navegação "quem gostou deste também gostou de…".
 - **Expansão sob demanda**: busca no Skoob mais leitores de um livro específico e recalcula tudo.
 - **Login seguro**: você digita a senha no próprio site, e a CLI só lê o cookie de sessão.
@@ -66,6 +67,7 @@ go run ./cmd/recomenda run -data testdata/exemplo.csv -user 530077 -n 10
 | `recomenda skoob`        | Coleta sua estante + vizinhança, grava `skoob.csv` e gera `recomendacoes.html`. |
 | `recomenda serve`        | App local no navegador, a partir do `skoob.csv`. |
 | `recomenda run`          | Recomenda a partir de qualquer CSV, sem rede. |
+| `recomenda notas`        | Baixa a nota geral de cada livro no Skoob para `skoob.csv.livros.json` (opcional, ver abaixo). |
 | `recomenda eval`         | Mede a qualidade das recomendações (ver [Qualidade](#qualidade)). |
 | `recomenda version`      | Mostra a versão. |
 
@@ -80,7 +82,7 @@ Os comandos com opções aceitam `-h`. Os principais ajustes:
 | `-ranking` | `likes` | Ordem do top-N: `likes`, `deviation` ou `prediction`. |
 | `-n` | `20` (`40` no `serve`) | Quantidade de recomendações. |
 
-Lista completa: `-min-overlap`, `-min-support`, `-shrinkage`, `-amplify`, `-item-k`, `-item-shrinkage`, `-abandoned-stars`, `-pop-weight`. Na coleta (`skoob`): `-seeds`, `-readers`, `-max-users`, `-interval`, `-mine-only`.
+Lista completa: `-min-overlap`, `-min-support`, `-shrinkage`, `-amplify`, `-item-k`, `-item-shrinkage`, `-abandoned-stars`, `-pop-weight`, `-global-blend`, `-global-weight`, `-global-pop-weight`, `-global-prior`. Na coleta (`skoob`): `-seeds`, `-readers`, `-max-users`, `-interval`, `-mine-only`.
 
 ## O app (`serve`)
 
@@ -133,6 +135,31 @@ Resultado numa coleta real (137 leitores testados; nDCG@20, maior é melhor):
 | temporal           |        0,098 |              0,058 |     **0,111** |
 
 Os padrões saíram dessas medições. Duas ideias testadas e reprovadas continuam disponíveis como opção, desligadas: tratar "abandonei" como nota baixa (`-abandoned-stars`) e misturar popularidade ao ranking (`-pop-weight`). Os números dependem dos dados de cada coleta: rode o `eval` na sua.
+
+### Como ler o `eval`
+
+Com uma ou duas centenas de leitores, a diferença entre duas variantes costuma ser menor que o ruído do sorteio: só trocando a semente, o nDCG do híbrido vai de 0,12 a 0,17. Por isso o `eval` roda 5 sementes por padrão (`-seeds`) e mostra, para cada variante, o **Δ nDCG** em relação ao híbrido de referência, com intervalo de 95% (bootstrap pareado por leitor). Só conte como ganho o que vier marcado com `*`, ou seja, com intervalo que não cruza o zero.
+
+No corte `-temporal`, os outros leitores também perdem o que leram depois da data de corte. Sem isso, os vizinhos "já sabiam" o futuro e o nDCG temporal saía inflado: 0,111 com vazamento contra 0,088 sem. Medido assim, o híbrido **empata** com a popularidade no corte temporal. Esse é o principal ponto a melhorar.
+
+### Nota geral do Skoob
+
+```bash
+recomenda notas                       # ~1 requisição por livro elegível; retomável com Ctrl+C
+recomenda eval -grid-global           # mede o efeito no ranking e na nota prevista
+```
+
+O `notas` busca a média e o número de avaliações de cada livro que pode virar recomendação, ou seja, avaliado por 2 ou mais leitores da coleta. Não há endpoint em lote, então são cerca de 1.500 requisições numa coleta típica, de 15 a 40 minutos. O cache vale 30 dias (`-max-age`). Com ele presente, `run`, `serve`, `skoob` e `eval` passam a usar a nota geral sozinhos. No `eval`, a nota escondida do próprio leitor é retirada da média do livro, para não inflar o resultado.
+
+Resultado na mesma coleta (todos os leitores):
+
+| uso da nota geral | aleatório | temporal |
+|---|---|---|
+| na nota prevista (`-global-blend 1`, padrão) | MAE 0,650 → **0,594**, RMSE 0,863 → **0,759** | MAE 0,646 → **0,600**, RMSE 0,894 → **0,795** |
+| qualidade no ranking (`-global-weight 0.2`) | Δ nDCG −0,0004 [−0,0022, +0,0015] | Δ nDCG +0,0018 [−0,0021, +0,0062] |
+| popularidade geral no ranking (`-global-pop-weight 0.1`) | Δ nDCG +0,0007 [−0,0004, +0,0019] | Δ nDCG −0,0008 [−0,0029, +0,0010] |
+
+A nota geral deixa a nota prevista bem mais precisa, mas não muda o top-N de forma mensurável: o ranking por likes já premia livros bem avaliados no grafo. Por isso o ranking a usa só como opção.
 
 ## Privacidade e segurança
 

@@ -42,3 +42,11 @@ func (r Rating) Consumed() bool {
 	}
 	return true
 }
+
+// BookStats é a avaliação geral do livro no Skoob (todos os leitores do
+// site, não só os coletados). A nota é da obra: todas as edições dão o mesmo.
+type BookStats struct {
+	Avg       float64   `json:"avg"`   // média geral (0.5..5; 0 = sem avaliações)
+	Count     int       `json:"count"` // quantas avaliações
+	FetchedAt time.Time `json:"fetched_at"`
+}

@@ -36,6 +36,9 @@ func serve(ctx context.Context, args []string) error {
 	if err != nil {
 		return fmt.Errorf("lendo %s: rode `recomenda skoob` antes (%w)", *data, err)
 	}
+	if _, err := loadStats(*data, &rec); err != nil {
+		return err
+	}
 
 	// Token é opcional: sem ele o app funciona, só não expande o grafo.
 	var src *source.Skoob

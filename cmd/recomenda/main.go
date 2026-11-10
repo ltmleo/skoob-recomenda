@@ -5,6 +5,7 @@
 //	recomenda logout                     # apaga o token salvo
 //	recomenda skoob                      # baixa estante + vizinhos e recomenda
 //	recomenda serve                      # app: recomendações, estante, seguir um livro
+//	recomenda notas                      # baixa a nota geral dos livros (cache)
 //	recomenda eval -data skoob.csv       # mede a qualidade (esconde notas e confere)
 //	recomenda [run] -data ratings.csv -user 530077 -n 20 -html out.html
 package main
@@ -36,7 +37,8 @@ const usage = `uso:
   recomenda logout
   recomenda skoob  [-mine-only] [-out skoob.csv] [-html recomendacoes.html]   (recomenda skoob -h)
   recomenda serve  [-data skoob.csv] [-addr 127.0.0.1:8080] [-open=false]   (app no navegador)
-  recomenda eval   [-data skoob.csv] [-user ID] [-temporal] [-grid]   (compara algoritmos)
+  recomenda notas  [-data skoob.csv] [-min-raters 2] [-max-age 720h]   (nota geral dos livros no Skoob)
+  recomenda eval   [-data skoob.csv] [-user ID] [-temporal] [-seeds 5] [-grid]   (compara algoritmos)
   recomenda [run] -data ARQUIVO.csv -user ID [flags]   (recomenda run -h para flags)
   recomenda version
 `
@@ -79,6 +81,8 @@ func main() {
 		err = skoob(ctx, args)
 	case "serve":
 		err = serve(ctx, args)
+	case "notas":
+		err = notas(ctx, args)
 	case "eval":
 		err = evaluate(args)
 	case "run":
@@ -172,6 +176,10 @@ func addAlgoFlags(fs *flag.FlagSet, o *recommend.Options) {
 	fs.IntVar(&o.MaxPerAuthor, "max-per-author", o.MaxPerAuthor, "máximo de recomendações do mesmo autor (0 = sem limite)")
 	fs.StringVar(&o.Ranking, "ranking", o.Ranking, "ordem do top-n: likes, deviation ou prediction")
 	fs.Float64Var(&o.PopWeight, "pop-weight", o.PopWeight, "peso da popularidade no ranking (0 = só personalização)")
+	fs.Float64Var(&o.GlobalWeight, "global-weight", o.GlobalWeight, "peso da nota geral do Skoob no ranking (precisa de `recomenda notas`)")
+	fs.Float64Var(&o.GlobalPopWeight, "global-pop-weight", o.GlobalPopWeight, "peso do nº de avaliações no Skoob no ranking")
+	fs.Float64Var(&o.GlobalBlend, "global-blend", o.GlobalBlend, "peso da nota geral do Skoob na nota prevista")
+	fs.Float64Var(&o.GlobalPrior, "global-prior", o.GlobalPrior, "avaliações fictícias na média da média bayesiana da nota geral")
 }
 
 // recFlags são as flags de recomendação de `run` e `skoob`.
@@ -212,6 +220,9 @@ func run(args []string) error {
 	}
 	if len(mem.Ratings[*user]) == 0 {
 		return fmt.Errorf("usuário %s não encontrado em %s", *user, *data)
+	}
+	if _, err := loadStats(*data, &rf.opts); err != nil {
+		return err
 	}
 	return recommendAndReport(mem, *user, rf)
 }
@@ -288,11 +299,63 @@ func skoob(ctx context.Context, args []string) error {
 	if *mineOnly {
 		return nil
 	}
+	if _, err := loadStats(*out, &rf.opts); err != nil {
+		return err
+	}
 	if err := recommendAndReport(mem, me, rf); err != nil {
 		return err
 	}
 	fmt.Fprintf(os.Stderr, "\nPróximo passo: recomenda serve -data %s   (app com estante e \"seguir um livro\")\n", *out)
 	return nil
+}
+
+// notas baixa a avaliação geral (média e número de notas no Skoob inteiro)
+// dos livros que podem virar recomendação e guarda em <data>.livros.json.
+// É uma requisição por livro (não há endpoint em lote); a coleta é retomável:
+// Ctrl+C salva o que já veio e a próxima execução continua de onde parou.
+func notas(ctx context.Context, args []string) error {
+	fs := flag.NewFlagSet("notas", flag.ExitOnError)
+	data := fs.String("data", "skoob.csv", "CSV gerado por `recomenda skoob`")
+	minRaters := fs.Int("min-raters", 2, "só livros avaliados por pelo menos isso de leitores na coleta")
+	maxAge := fs.Duration("max-age", 30*24*time.Hour, "rebusca notas mais velhas que isso (0 = nunca)")
+	interval := fs.Duration("interval", 500*time.Millisecond, "intervalo mínimo entre requisições ao Skoob")
+	_ = fs.Parse(args)
+
+	mem, err := source.LoadCSV(*data)
+	if err != nil {
+		return err
+	}
+	s, err := store()
+	if err != nil {
+		return err
+	}
+	tok, err := s.Load()
+	if err != nil {
+		return err
+	}
+	src := source.NewSkoob(auth.APIBase, tok)
+	src.Interval = *interval
+	src.Seed(mem.Books)
+
+	path := source.StatsPath(*data)
+	cache, err := source.LoadStats(path)
+	if err != nil {
+		return err
+	}
+	ids := crawl.Eligible(mem.Ratings, *minRaters)
+	fmt.Fprintf(os.Stderr, "%d livros elegíveis, %d já no cache (%s). Ctrl+C salva o que já veio.\n", len(ids), cache.Len(), path)
+	save := func() error { return cache.Save(path) }
+	n, ferr := crawl.FillStats(ctx, src, cache, ids, *maxAge, save, func(done, total int) {
+		fmt.Fprintf(os.Stderr, "\r  notas: %d/%d", done, total)
+		if done == total {
+			fmt.Fprintln(os.Stderr)
+		}
+	})
+	if err := save(); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stderr, "\n%d livros atualizados; cache com %d livros.\n", n, cache.Len())
+	return ferr
 }
 
 func saveCSV(path string, mem *source.Memory) error {
@@ -343,7 +406,9 @@ func evaluate(args []string) error {
 	fs.IntVar(&cfg.At, "at", cfg.At, "K das métricas Precision@K, Recall@K e nDCG@K")
 	fs.BoolVar(&cfg.Temporal, "temporal", false, "esconde as leituras mais recentes (simula o futuro) em vez de sortear")
 	fs.Int64Var(&cfg.Seed, "seed", cfg.Seed, "semente do sorteio")
+	fs.IntVar(&cfg.Seeds, "seeds", 5, "repete o sorteio com tantas sementes (seed, seed+1, ...)")
 	grid := fs.Bool("grid", false, "varre item-weight, k, amplify e shrinkage em torno das flags")
+	gridGlobal := fs.Bool("grid-global", false, "varre os pesos da nota geral do Skoob (precisa de `recomenda notas`)")
 	addAlgoFlags(fs, &o)
 	_ = fs.Parse(args)
 
@@ -352,13 +417,42 @@ func evaluate(args []string) error {
 		return err
 	}
 	o.Now = time.Now()
+	stats, err := loadStats(*data, &o)
+	if err != nil {
+		return err
+	}
 	vs := []eval.Variant{eval.PopularVariant()}
 	add := func(name string, f func(x *recommend.Options)) {
 		x := o
 		f(&x)
 		vs = append(vs, eval.KNN(name, x))
 	}
-	if *grid {
+	// A referência dos Δ é o híbrido sem a nota geral (o algoritmo anterior).
+	noGlobal := func(x *recommend.Options) { x.Global = nil }
+	add(fmt.Sprintf("híbrido sem nota geral (α=%.2g)", o.ItemWeight), noGlobal)
+	ref := len(vs) - 1
+	if *gridGlobal {
+		if stats.Len() == 0 {
+			return fmt.Errorf("sem notas gerais em %s: rode `recomenda notas` antes", source.StatsPath(*data))
+		}
+		for _, m := range []float64{5, 20, 100} {
+			for _, gw := range []float64{0.1, 0.2, 0.3, 0.5} {
+				add(fmt.Sprintf("qualidade %.2g m=%g", gw, m), func(x *recommend.Options) {
+					x.GlobalPrior, x.GlobalWeight, x.GlobalPopWeight, x.GlobalBlend = m, gw, 0, 0
+				})
+			}
+		}
+		for _, pw := range []float64{0.1, 0.2, 0.3} {
+			add(fmt.Sprintf("popularidade geral %.2g", pw), func(x *recommend.Options) {
+				x.GlobalWeight, x.GlobalPopWeight, x.GlobalBlend = 0, pw, 0
+			})
+		}
+		for _, b := range []float64{0.25, 0.5, 1, 2} {
+			add(fmt.Sprintf("previsão geral %.2g", b), func(x *recommend.Options) {
+				x.GlobalWeight, x.GlobalPopWeight, x.GlobalBlend = 0, 0, b
+			})
+		}
+	} else if *grid {
 		for _, rk := range []string{recommend.RankPrediction, recommend.RankDeviation, recommend.RankLikes} {
 			for _, a := range []float64{0, 0.25, 0.5, 0.75, 1} {
 				add(fmt.Sprintf("%s α=%.2g", rk, a), func(x *recommend.Options) { x.Ranking, x.ItemWeight = rk, a })
@@ -380,9 +474,11 @@ func evaluate(args []string) error {
 		add("sem abandono implícito", func(x *recommend.Options) { x.AbandonedStars = 0 })
 		add("sem peso temporal", func(x *recommend.Options) { x.HalfLife = 0 })
 	} else {
-		add("user-knn", func(x *recommend.Options) { x.ItemWeight = 0 })
-		add("item-knn", func(x *recommend.Options) { x.ItemWeight = 1 })
-		add(fmt.Sprintf("híbrido (α=%.2g)", o.ItemWeight), func(*recommend.Options) {})
+		add("user-knn", func(x *recommend.Options) { x.ItemWeight = 0; x.Global = nil })
+		add("item-knn", func(x *recommend.Options) { x.ItemWeight = 1; x.Global = nil })
+		if stats.Len() > 0 {
+			add(fmt.Sprintf("híbrido + nota geral (α=%.2g)", o.ItemWeight), func(*recommend.Options) {})
+		}
 	}
 
 	split := "aleatório"
@@ -393,8 +489,12 @@ func evaluate(args []string) error {
 	if cfg.Users >= 0 {
 		who = fmt.Sprintf("até %d leitores", cfg.Users)
 	}
-	fmt.Fprintf(os.Stderr, "Avaliando %d variantes: %s, %.0f%% das notas escondidas (corte %s)...\n",
-		len(vs), who, cfg.Holdout*100, split)
+	seeds := fmt.Sprintf("%d sementes", max(cfg.Seeds, 1))
+	if cfg.Temporal && cfg.Users < 0 {
+		seeds = "determinístico"
+	}
+	fmt.Fprintf(os.Stderr, "Avaliando %d variantes: %s, %.0f%% das notas escondidas (corte %s, %s, %d livros com nota geral)...\n",
+		len(vs), who, cfg.Holdout*100, split, seeds, stats.Len())
 	ms := eval.Run(mem.Ratings, cfg, vs...)
 
 	w := len([]rune("variante"))
@@ -403,10 +503,36 @@ func evaluate(args []string) error {
 	}
 	pad := func(s string) string { return s + strings.Repeat(" ", w-len([]rune(s))) }
 	at := fmt.Sprint(cfg.At)
-	fmt.Printf("%s  %7s  %7s  %7s  %6s  %6s  %7s  leitores\n", pad("variante"), "P@"+at, "R@"+at, "nDCG@"+at, "MAE", "RMSE", "cobert.")
-	for _, m := range ms {
-		fmt.Printf("%s  %7.4f  %7.4f  %7.4f  %6.3f  %6.3f  %6.1f%%  %d\n", pad(m.Name),
-			m.Precision, m.Recall, m.NDCG, m.MAE, m.RMSE, m.Coverage*100, m.Users)
+	fmt.Printf("%s  %7s  %7s  %7s  %6s  %6s  %6s  %7s  %-24s  leitores\n", pad("variante"),
+		"P@"+at, "R@"+at, "nDCG@"+at, "dp", "MAE", "RMSE", "cobert.", "Δ nDCG [IC 95%]")
+	for i, m := range ms {
+		delta := "(referência)"
+		if i != ref {
+			d := eval.Compare(ms[ref], m, 2000, 1)
+			mark := ""
+			if d.Significant() {
+				mark = " *"
+			}
+			delta = fmt.Sprintf("%+.4f [%+.4f, %+.4f]%s", d.Mean, d.Lo, d.Hi, mark)
+		}
+		fmt.Printf("%s  %7.4f  %7.4f  %7.4f  %6.4f  %6.3f  %6.3f  %6.1f%%  %-24s  %d\n", pad(m.Name),
+			m.Precision, m.Recall, m.NDCG, m.NDCGStd, m.MAE, m.RMSE, m.Coverage*100, delta, m.Users)
 	}
+	fmt.Fprintln(os.Stderr, "\nΔ: diferença de nDCG para a referência, pareada por leitor; * = o intervalo não cruza o zero.")
 	return nil
+}
+
+// loadStats liga a nota geral do Skoob (cache de `recomenda notas`) às
+// opções do algoritmo. Sem cache, devolve um vazio e o algoritmo não a usa.
+func loadStats(dataPath string, o *recommend.Options) (*source.StatsCache, error) {
+	c, err := source.LoadStats(source.StatsPath(dataPath))
+	if err != nil {
+		return nil, err
+	}
+	if c.Len() > 0 {
+		o.Global = c.Get
+	} else {
+		o.Global = nil
+	}
+	return c, nil
 }

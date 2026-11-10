@@ -55,7 +55,8 @@ go run ./cmd/recomenda eval       # qualidade das recomendações
 Toda mudança em `internal/recommend` deve vir com o antes e o depois de
 `recomenda eval` no PR, de preferência nos cortes aleatório e `-temporal`
 (`-users -1`). Uma ideia que não melhora as métricas pode entrar desligada,
-como opção, mas não deve virar o padrão.
+como opção, mas não deve virar o padrão. "Melhorar" quer dizer Δ nDCG com
+`*` (intervalo de 95% que não cruza o zero), não só um número maior.
 
 ### Dados
 

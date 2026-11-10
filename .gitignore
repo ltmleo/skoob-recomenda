@@ -3,6 +3,7 @@
 /meus-livros.csv
 /recomendacoes.html
 *.expansoes.json
+*.livros.json
 # qualquer outro CSV gerado na raiz; dados de exemplo ficam em testdata/
 /*.csv
 

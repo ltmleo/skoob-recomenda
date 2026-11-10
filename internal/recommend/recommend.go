@@ -59,6 +59,20 @@ type Options struct {
 	// ranking por evidência: 0 = só personalização.
 	PopWeight float64
 
+	// Global devolve a avaliação geral do livro no Skoob (média e número de
+	// notas no site inteiro); nil = não usa. A média entra encolhida para a
+	// média dos candidatos (média bayesiana com GlobalPrior notas fictícias),
+	// para que 3 notas 5 não valham mais que 900 notas 4,5.
+	Global      func(bookID string) (domain.BookStats, bool)
+	GlobalPrior float64
+	// GlobalBlend é o peso, na nota prevista, da previsão pela nota geral
+	// (sua média + quanto o livro está acima da média): 0 = não usa.
+	GlobalBlend float64
+	// GlobalWeight mistura a qualidade geral (média bayesiana) no ranking
+	// por evidência; GlobalPopWeight, a popularidade geral (log do nº de notas).
+	GlobalWeight    float64
+	GlobalPopWeight float64
+
 	Now time.Time // referência para idade (testes)
 }
 
@@ -96,12 +110,17 @@ func gain(ranking string, stars, dev float64) float64 {
 //   - Abandono implícito piorou o MAE em todos os cortes: fica desligado.
 //   - Meia-vida de 1 ano é a melhor no corte temporal (o cenário real).
 //   - Popularidade como prior (PopWeight) não ajudou de forma consistente.
+//   - Nota geral do Skoob (com cache de `recomenda notas`): na nota prevista
+//     (GlobalBlend=1) baixa o MAE de 0,65 para 0,59 nos dois cortes; no
+//     ranking (GlobalWeight, GlobalPopWeight) não teve ganho significativo
+//     e fica desligada.
 func DefaultOptions() Options {
 	return Options{
 		HalfLife: 365 * 24 * time.Hour, Shrinkage: 5, K: 50, MinOverlap: 3, MinSupport: 2, Amplify: 1,
 		ItemWeight: 0.5, ItemK: 30, ItemShrinkage: 10,
 		Ranking:      RankLikes,
 		MaxPerAuthor: 3,
+		GlobalPrior:  20, GlobalBlend: 1,
 	}
 }
 
@@ -280,6 +299,7 @@ func Recommend(ratings map[string][]domain.Rating, target string, n int, o Optio
 	}
 
 	alpha := clamp(o.ItemWeight, 0, 1)
+	gl := newGlobal(cand, o)
 	minSup := max(o.MinSupport, 1)
 	recs := make([]Recommendation, 0, len(cand))
 	type evid struct{ u, i float64 } // evidência bruta para o ranking
@@ -331,6 +351,11 @@ func Recommend(ratings map[string][]domain.Rating, target string, n int, o Optio
 		if wsum == 0 {
 			continue
 		}
+		if g := gl.of(b); o.GlobalBlend > 0 && g.count > 0 {
+			w := o.GlobalBlend * g.conf
+			wsum += w
+			psum += w * clamp(me.mean+g.bayes-gl.mean, 0.5, 5)
+		}
 		rec.Predicted = psum / wsum
 		rec.Score = me.mean + (rec.Predicted-me.mean)*wsum
 		recs = append(recs, rec)
@@ -360,6 +385,7 @@ func Recommend(ratings map[string][]domain.Rating, target string, n int, o Optio
 			if maxPop > 0 {
 				s = (1-o.PopWeight)*s + o.PopWeight*float64(pop[recs[k].BookID])/float64(maxPop)
 			}
+			s = gl.rank(s, recs[k].BookID)
 			recs[k].Score = s
 		}
 	}
@@ -371,6 +397,72 @@ func Recommend(ratings map[string][]domain.Rating, target string, n int, o Optio
 	})
 	recs = diversify(recs, n, o)
 	return Result{Mean: me.mean, Neighbors: neighbors, Recommendations: recs}
+}
+
+// global resume a avaliação geral dos candidatos no Skoob.
+type global struct {
+	o         Options
+	stats     map[string]globalStat
+	mean      float64 // média do livro típico entre os candidatos (sem ponderar: best-sellers não dominam)
+	lo, hi    float64 // faixa da média bayesiana (para escalar o ranking)
+	maxLogPop float64
+}
+
+type globalStat struct {
+	bayes float64 // média encolhida para a média geral
+	conf  float64 // count/(count+prior): quanto confiar na média do livro
+	count int
+}
+
+func newGlobal(cand map[string]*candidate, o Options) global {
+	g := global{o: o, stats: map[string]globalStat{}}
+	if o.Global == nil {
+		return g
+	}
+	var sum, n float64
+	raw := map[string]domain.BookStats{}
+	for b := range cand {
+		if st, ok := o.Global(b); ok && st.Count > 0 && st.Avg > 0 {
+			raw[b] = st
+			sum += st.Avg
+			n++
+		}
+	}
+	if n == 0 {
+		return g
+	}
+	g.mean = sum / n
+	g.lo, g.hi = g.mean, g.mean
+	m := max(o.GlobalPrior, 0)
+	for b, st := range raw {
+		c := float64(st.Count)
+		s := globalStat{bayes: (c*st.Avg + m*g.mean) / (c + m), conf: c / (c + m), count: st.Count}
+		g.stats[b] = s
+		g.lo, g.hi = min(g.lo, s.bayes), max(g.hi, s.bayes)
+		g.maxLogPop = max(g.maxLogPop, math.Log1p(c))
+	}
+	return g
+}
+
+// of devolve a avaliação geral do livro; sem dados, fica na média (neutro).
+func (g global) of(b string) globalStat {
+	if s, ok := g.stats[b]; ok {
+		return s
+	}
+	return globalStat{bayes: g.mean}
+}
+
+// rank mistura qualidade e popularidade gerais (escaladas para 0..1) ao
+// score personalizado s, que já está em 0..1.
+func (g global) rank(s float64, b string) float64 {
+	st := g.of(b)
+	if w := g.o.GlobalWeight; w > 0 && g.hi > g.lo {
+		s = (1-w)*s + w*(st.bayes-g.lo)/(g.hi-g.lo)
+	}
+	if w := g.o.GlobalPopWeight; w > 0 && g.maxLogPop > 0 {
+		s = (1-w)*s + w*math.Log1p(float64(st.count))/g.maxLogPop
+	}
+	return s
 }
 
 // userNeighbors calcula o Pearson ponderado contra cada usuário e devolve
